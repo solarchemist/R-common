@@ -12,7 +12,7 @@ SubstrateHistory <- function(sampleid) {
    # Loops remove all "\\labreport{...}" strings (they make the table too wide otherwise)
    for (j in 1:dim(sample.history)[1]) {
       for (k in 1:dim(sample.history)[2]) {
-         sample.history[j, k] <- gsub("^.*?\\}\\{", "", sample.history[j, k])
+         sample.history[j, k] <- gsub("^\\\\labreport.*?\\}\\{", "", sample.history[j, k])
          sample.history[j, k] <- gsub("\\}$", "", sample.history[j, k])
       }
    }
