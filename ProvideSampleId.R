@@ -1,16 +1,21 @@
-ProvideSampleId <- function (pathexpfile) {
+ProvideSampleId <- function (pathexpfile, implementation = "filename") {
    # Returns a "unique" sample ID when supplied 
    # with a path to an experimental file.
-   ## Note: the sample ID must derive directly from the file or path.
+   # The second arg is optional, defaults to "old" behaviour, 
+   # but can be set to "dirname" for another behaviour 
+   # The second arg was added so as not to break older code.
+   ## Note to myself: the sample ID must derive directly from the file or path.
    
-   # basename(dirname()) returns the name of the lowest sub-directory
-   # split()[[1]][2] splits the dirname at the hyphen and returns the sampleid
-   sampleid <- strsplit(x = basename(dirname(pathexpfile)),
-                        split = "-")[[1]][2]
-   
-#    # basename() returns the filename sans path
-#    # sub() returns the filename sans extension
-#    sampleid <- sub("\\.[\\w]+$", "", basename(pathexpfile), perl = TRUE)
+   if (implementation == "dirname") {   
+      # basename(dirname()) returns the name of the lowest sub-directory
+      # split()[[1]][2] splits the dirname at the hyphen and returns the sampleid
+      sampleid <- strsplit(x = basename(dirname(pathexpfile)),
+                           split = "-")[[1]][2]
+   } else {
+      # basename() returns the filename sans path
+      # sub() returns the filename sans extension
+      sampleid <- sub("\\.[\\w]+$", "", basename(pathexpfile), perl = TRUE)
+   }
    
    #### The code below is the old ProvideSampleId() function   
    #  ### OBS! Only very rudimentary error-checking.
