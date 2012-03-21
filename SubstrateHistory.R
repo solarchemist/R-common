@@ -27,7 +27,7 @@ SubstrateHistory <- function(sampleid) {
    empty.names <- names(sample.history)[which(empty.cols)]
    # Remove the identified empty columns plus those columns deemed unwanted
    sample.history <- sample.history[, -c(which(empty.cols == TRUE), 
-                                         which(names(sample.history) == "sampleid"), 
+                                         #which(names(sample.history) == "sampleid"), 
                                          which(names(sample.history) == "created"), 
                                          which(names(sample.history) == "project"))]
    # Save the empty column names as attribute to sample.history dataframe
