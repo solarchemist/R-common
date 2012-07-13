@@ -1,8 +1,11 @@
 ##################################################
 ############# SubfigureGenerator #################
 ##################################################
-SubfigureGenerator <- function(images, captions, 
-                               perpage = 6, ncol = 2, 
+SubfigureGenerator <- function(images, 
+                               subcaptions, 
+                               mainlabel = "fig:mainfig",
+                               perpage = 6, 
+                               ncol = 2, 
                                landscape = FALSE) {
    ## Description:
    ##   
@@ -12,7 +15,10 @@ SubfigureGenerator <- function(images, captions,
    ##   images: vector with full paths to images 
    ##     (png-files or other LaTeX-compatible format) 
    ##     to be put in a LaTeX subfigure environment
-   ##   captions: vector with subcaptions for each subfigure
+   ##   subcaptions: vector with subcaptions for each subfigure
+   ##   mainlabel: string with LaTeX label for the main figure environment
+   ##     Should be set individually if SubfigureGenerator() is called
+   ##     more than once from the same document
    ##   perpage: maximum number of images on one page,
    ##     one A4 page fits six images with subcaptions
    ##   ncol: LaTeX subfigure is setup with ncol columns
@@ -51,15 +57,15 @@ SubfigureGenerator <- function(images, captions,
          # this includes the i-th image in a subfigure
          cat(paste("\\includegraphics[width=\\linewidth]{", 
                    images[i], "}\n", sep = ""), file = zz)
-         cat(paste("\\caption{", captions[i], 
+         cat(paste("\\caption{", subcaptions[i], 
                    "}\n", sep = ""), file = zz)
-         cat(paste("\\label{fig:sfig-", int2padstr(ii = i, pchr = "0", w = 3), 
+         cat(paste("\\label{", mainlabel, ":sfig-", int2padstr(ii = i, pchr = "0", w = 3), 
                    "}\n", sep = ""), file = zz)
          cat("\\end{subfigure}", file = zz)
          #
          if (!(i %% (perpage)) && length(images) != (perpage*page.counter)) {
             cat("\\caption{Main figure caption.}\n", file = zz)
-            cat(paste("\\label{fig:mainfig-", 
+            cat(paste("\\label{", mainlabel, "-",  
                       int2padstr(ii = page.counter, pchr = "0", w = 3), 
                       "}\n", sep = ""), file = zz)
             if (landscape == TRUE) {
@@ -89,7 +95,7 @@ SubfigureGenerator <- function(images, captions,
       # 
       # end figure
       cat("\\caption{Main caption.}\n", file = zz)
-      cat(paste("\\label{fig:mainfig-", 
+      cat(paste("\\label{", mainlabel, "-",
                 int2padstr(ii= page.counter, pchr = "0", w = 3), 
                 "}\n", sep = ""), file = zz)
       if (landscape == TRUE) {
