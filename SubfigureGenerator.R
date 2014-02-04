@@ -50,7 +50,7 @@ SubfigureGenerator <- function(images,
          cat("\\begin{figure}[tb]\\centering\n", file = zz)
       }
       
-      # display images in a X-by-X grid
+      # display images in a X-by-Y grid
       for (i in 1:length(images)) {
          cat(paste("\\begin{subfigure}[b]{", round(subfigure.width, 2), 
                    pagewidth, "}\\centering\n", sep = ""), file = zz)
