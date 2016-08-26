@@ -47,7 +47,7 @@ SubfigureGenerator <- function(images,
       if (landscape == TRUE) {
          cat("\\begin{sidewaysfigure}\\centering\n", file = zz)
       } else {
-         cat("\\begin{figure}[tb]\\centering\n", file = zz)
+         cat("\\begin{figure}[hb]\\centering\n", file = zz)
       }
       
       # display images in a X-by-Y grid

@@ -33,6 +33,6 @@ thth2d <- function(thth, wavelength = 1.540562) {
    #    Zn-Kb1 wavelength=1.295250
    # Usage:
    # thth       : vector with thth values in degrees
-   # wavelength : radiation wavelength in Ångström
+   # wavelength : radiation wavelength in Angstrom
    return (wavelength / (2 * sin(as.radians(thth))))
 }
