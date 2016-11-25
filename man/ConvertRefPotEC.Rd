@@ -19,8 +19,8 @@ potential in output reference scale (numeric)
 \description{
 This function does the heavy lifting.
 Converts from an electrochemical reference scale into another.
-SHE:     standard hydrogen electrode scale
-Ag/AgCl: silver silver-chloride electrode scale (3M KCl)
-SCE:     standard calomel scale
+SHE:     standard hydrogen electrode
+Ag/AgCl: silver silver-chloride electrode (3M KCl)
+SCE:     saturated calomel electrode
 }
 

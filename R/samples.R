@@ -27,6 +27,28 @@ ProvideSampleId <- function (pathexpfile, implementation = "filename") {
 }
 
 
+
+#' Extract sampleid from a string
+#'
+#' Extract sampleid from a string by utilising the fact that samepleid's
+#' adhere to a defined format.
+#'
+#' @param string character string that contains a sampleid
+#'
+#' @return sampleid (character string)
+#' @export
+ExtractSampleIdString <- function(string) {
+   # regmatches() extracts matched substrings based on the results of regexpr and friends
+   # another way to do this would be stringr::str_extract()
+   sampleid <-
+      regmatches(string, regexpr("\\d{1,2}[A-Za-z]{1}\\d{2,4}", string))
+   # return empty string rather than character(0)
+   if (length(sampleid) == 0) sampleid <- ""
+   return(sampleid)
+}
+
+
+
 #' Display the history of a substrate (sampleid)
 #'
 #' @param sampleid    string
