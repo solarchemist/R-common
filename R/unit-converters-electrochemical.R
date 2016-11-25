@@ -7,6 +7,7 @@
 #' @return potential in SHE scale (numeric)
 #' @export
 AVS2SHE <- function(avs) {
+   .Deprecated("as.SHE")
    she <- -(4.5 + avs)
    return(she)
 }
@@ -21,6 +22,7 @@ AVS2SHE <- function(avs) {
 #' @return potential in AVS scale (numeric)
 #' @export
 SHE2AVS <- function(she) {
+   .Deprecated("as.SHE")
    avs <- -(4.5 + she)
    return(avs)
 }
@@ -335,10 +337,6 @@ as.SHE <- function(potential,
 
 
 
-
-
-
-
 #' ConvertRefPotEC
 #'
 #' This function does the heavy lifting.
@@ -353,6 +351,7 @@ as.SHE <- function(potential,
 #'
 #' @return potential in output reference scale (numeric)
 ConvertRefPotEC <- function(argpotential, argrefscale, valuerefscale) {
+   .Deprecated("as.SHE")
    ##### Add more reference electrodes here >>
    refpotatSHEzero <- c(     0,     -0.21,  -0.24,        3)
    refrownames     <- c( "SHE", "Ag/AgCl",  "SCE", "Li/Li+")
@@ -405,6 +404,7 @@ ConvertRefPotEC <- function(argpotential, argrefscale, valuerefscale) {
 #' @return potential in output reference scale (numeric)
 #' @export
 ConvertRefPot <- function(argpotential, argrefscale, valuerefscale) {
+   .Deprecated("as.SHE")
    # You should check that argpotential is valid numeric
 
    #  IDEA: make a matrix out of these (scale names and flags)
