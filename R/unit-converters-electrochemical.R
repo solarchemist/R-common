@@ -39,34 +39,35 @@ SHE2AVS <- function(she) {
 #' @param refname string
 #'
 #' @return the canonical name or empty string
+#' @export
 RefCanonicalName <- function(refname) {
    # scale names
    electrode.system <- list()
    electrode.system[["SHE"]] <-
       c("SHE",
-        "standard hydrogen",
-        "standard hydrogen electrode")
+        "Standard hydrogen",
+        "Standard hydrogen electrode")
    electrode.system[["AgCl/Ag"]] <-
       c("AgCl/Ag",
         "Ag/AgCl",
         "AgCl",
-        "silver-silver chloride",
-        "silver chloride",
+        "Silver-Silver chloride",
+        "Silver chloride",
         "SSC") # saturated silver-silver chloride is sometimes abbreviated SSC
    electrode.system[["Hg2Cl2/Hg"]] <-
       c("Hg2Cl2/Hg",
         "Hg/Hg2Cl2",
         "Hg2Cl2",
-        "calomel-mercury",
-        "mercury-calomel",
+        "Calomel-Mercury",
+        "Mercury-Calomel",
         "SCE")
    electrode.system[["AVS"]] <-
       c("AVS",
-        "vacuum",
-        "vacuum scale",
-        "absolute",
-        "absolute scale",
-        "absolute vacuum scale")
+        "Vacuum",
+        "Vacuum scale",
+        "Absolute",
+        "Absolute scale",
+        "Absolute vacuum scale")
    electrode.system[["Li"]] <-
       c("Li",
         "Li/Li+",
