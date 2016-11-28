@@ -8,7 +8,7 @@ as.SHE(potential, scale, concentration = "saturated", temperature = 25,
   as.SHE.data = potentials.as.SHE())
 }
 \arguments{
-\item{potential}{in the original scale, V or eV}
+\item{potential}{potential in volt}
 
 \item{scale}{name of the original scale}
 
@@ -22,6 +22,7 @@ as.SHE(potential, scale, concentration = "saturated", temperature = 25,
 potential in SHE scale
 }
 \description{
-Convert from electrochemical or electronic scale to SHE
+Convert an arbitrary number of potentials against any known electrochemical
+scale (or the electronic vacuum scale) to potential vs SHE.
 }
 

@@ -35,10 +35,14 @@ SHE2AVS <- function(she) {
 #' (as defined by this package).
 #' This function tries to match against as many variations as possible for each
 #' reference electrode.
+#' The entire point of this function is to decrease the mental load on the user
+#' by not requiring them to remember a particular label or name for each reference
+#' electrode, instead almost any sufficiently distinct label or string will still
+#' be correctly identified.
 #'
-#' @param refname string
+#' @param refname string or a vector of strings
 #'
-#' @return the canonical name or empty string
+#' @return vector with corresponding "canonical" name or empty string (if none found)
 #' @export
 RefCanonicalName <- function(refname) {
    # scale names
@@ -73,33 +77,35 @@ RefCanonicalName <- function(refname) {
         "Li/Li+",
         "Lithium")
 
-   # to match the lowercase version, use tolower()
-   # perhaps also replace hyphens and slashes with space?
-
-   matches <-
-      data.frame(electrode = names(electrode.system),
-                 m = rep(0, length(electrode.system)),
+   # defining refname in this manner makes sure to get all possible combinations
+   # but there might be a number of duplicates, but those we can
+   # get rid of in the next step
+   electrode <-
+      data.frame(refname =
+                    # here we create lower-case version of electrode.system,
+                    # and version with symbols (-/) subbed with spaces
+                    c(unname(unlist(electrode.system)),
+                      tolower(unname(unlist(electrode.system))),
+                      gsub("[-/]", " ", unname(unlist(electrode.system)))),
+                 refcanon =
+                    rep(sub("[0-9]$", "", names(unlist(electrode.system))), 3),
                  stringsAsFactors = FALSE)
+   # detect and remove duplicates
+   electrode <-
+      electrode[!duplicated(electrode$refname),]
+   # reset row numbering in dataframe just for good measure
+   row.names(electrode) <- 1:dim(electrode)[1]
 
-   # loop over electrode systems
-   for (i in 1:length(electrode.system)) {
-      # check for a match in any cell of this row,
-      # also trying all lower-case and substituting symbols with spaces
-      if (any(electrode.system[[i]] == refname) ||
-          any(tolower(electrode.system[[i]]) == refname) ||
-          any(gsub("[-/]", " ", electrode.system[[i]]) == refname)) {
-         matches$m[i] <- 1
-      }
+   # pre-allocate the return vector
+   refcanon <- rep("", length(refname))
+   # now all we have to do is check each user-submitted refname against
+   # electrode$refname and return the value on the same row but next column
+   for (i in 1:length(refname)) {
+      refcanon[i] <-
+         electrode$refcanon[which(electrode$refname == refname[i])]
    }
 
-   # if everything went as expected we should have just one match
-   if (sum(matches$m) != 1) {
-      # something wrong (should probably add warn/error here)
-      # for now, just return empty string
-      return("")
-   } else {
-      return(matches$electrode[which(matches$m == 1)])
-   }
+   return(refcanon)
 }
 
 
@@ -212,7 +218,10 @@ potentials.as.SHE <- function() {
 
 #' Convert from electrochemical or electronic scale to SHE
 #'
-#' @param potential in the original scale, V or eV
+#' Convert an arbitrary number of potentials against any known electrochemical
+#' scale (or the electronic vacuum scale) to potential vs SHE.
+#'
+#' @param potential potential in volt
 #' @param scale name of the original scale
 #' @param concentration of electrolyte in mol/L, or as the string "saturated"
 #' @param temperature of system in degrees Celsius
@@ -229,109 +238,104 @@ as.SHE <- function(potential,
    # if the supplied temperature does not exist in the data, this function will attempt to interpolate
    # note that concentration has to match, no interpolation is attempted for conc
 
-   if (RefCanonicalName(scale) == "") {
-      warning("as.SHE(): Sorry, you have supplied an unrecognised electrode scale.")
-      return(NA)
+   # make this work for arbitrary-length vectors of potential and scale
+   # make sure potential and scale args have the same length
+   if (length(potential) == 0 | length(scale) == 0) {
+      stop("Arguments potential or scale cannot be empty!")
+   } else if (length(potential) != length(scale)) {
+      stop("Arguments potential and scale must have equal number of elements")
    }
 
-   # there is the simple case of
-   if (RefCanonicalName(scale) == "SHE") {
-      warning("This function can only convert from scales other than SHE!")
-      return(NA)
+   arglength <- length(potential)
+   # make the concentration and temperature args to this same length,
+   # unless the user supplied them (only necessary for > 1)
+   if (arglength > 1) {
+      # handle two cases:
+      # 1. user did not touch concentration or temperature args.
+      #    Assume they forgot and reset their length and print a message
+      # 2. user did change concentration or temperature, but still failed to
+      #    ensure length equal to arglength. In this case, abort.
+      # note: we can get the default value set in the function call using formals()
+      if (identical(concentration, formals(as.SHE)$concentration) &
+          identical(temperature, formals(as.SHE)$temperature)) {
+         # case 1
+         # message("NOTE: default concentration and temperature values used for all potentials and scales.")
+         message(paste0("Default concentration (", formals(as.SHE)$concentration, ") and default temperature (", formals(as.SHE)$temperature, "C) used for all supplied potential and scale values."))
+         concentration <- rep(concentration, arglength)
+         temperature <- rep(temperature, arglength)
+      } else {
+         # case 2
+         stop("Arguments concentration and temperature must have same number of elements as potential and scale!")
+      }
    }
 
-   # AVS needs special consideration
-   if (RefCanonicalName(scale) == "AVS") {
-      # reset arg concentration
-      concentration <- ""
-      # second, since AVS scale goes in the opposite direction to the electrochemical scales
-      # we will define our own function
-      negifavs <- function(a, b) {
-         a - b
-      }
-   } else {
-      # we will define the same function differently for
-      # the case we're not dealing with AVS
-      negifavs <- function(a, b) {
-         a + b
-      }
+   ## we can now safely assume that length(<args>) == arglength
+   # place args into a single dataframe
+   # this way, we can correlate columns to each other by row
+   df <-
+      data.frame(potential = potential,
+                 scale = RefCanonicalName(scale),
+                 concentration = concentration,
+                 temperature = temperature,
+                 stringsAsFactors = FALSE)
+   # add column to keep track of vacuum scale
+   df$vacuum <- as.logical(FALSE)
+   # add column to hold calc potential vs SHE
+   df$SHE <-  as.numeric(NA)
+
+   # AVS scale special considerations
+   # 1. concentration is meaningless
+   # 2. direction is opposite of electrochemical scales, requiring change of sign
+   if (any(df$scale == RefCanonicalName("AVS"))) {
+      # concentration is meaningless for AVS (no electrolyte)
+      # so for those rows, we'll reset it
+      df$concentration[which(df$scale == RefCanonicalName("AVS"))] <- ""
+      df$vacuum[which(df$scale == RefCanonicalName("AVS"))] <- TRUE
    }
 
-   if (is.character(concentration)) {
-      # supplied concentration is character string
-      subspot <-
-         subset(subset(as.SHE.data,
-                       electrode == RefCanonicalName(scale)),
-                conc.string == concentration)
-      # if either "scale" or "concentration" are not found in the data, subspot will contain zero rows
-      if (dim(subspot)[1] == 0) {
-         warning("as.SHE(): Supplied scale or concentration does not exist in data. Returning NA.")
-         return(NA)
+   # now just work our way through df, line-by-line to determine potential as SHE
+   # all necessary conditions should be recorded right here in df
+   for (p in 1:dim(df)[1]) {
+      if (is.character(df$concentration[p])) {
+         subset.SHE.data <-
+            subset(subset(as.SHE.data, conc.string == df$concentration[p]),
+                   electrode == df$scale[p])
+      } else {
+         subset.SHE.data <-
+            subset(subset(as.SHE.data, conc.num == df$concentration[p]),
+                   electrode == df$scale[p])
       }
-      # so far, we have
-      # scale: checked!
-      # concentration: checked!
-      # only temperature remains to be handled
-      # temperature value could happen to match a value in the data, or lie somewhere in between
-      # note: we will not allow extrapolation
-      if (!any(subspot$temp == temperature)) {
-         # if sought temperature is not available in dataset, check that it falls inside
-         if ((temperature < max(subspot$temp)) && (temperature > min(subspot$temp))) {
+
+      # temperature
+      # either happens to match a temperature in the dataset, or we interpolate
+      # (under the assumption that potential varies linearly with temperature)
+      if (!any(subset.SHE.data$temp == df$temperature[p])) {
+         # sought temperature was not available in dataset, check that it falls inside
+         if ((df$temperature[p] < max(subset.SHE.data$temp)) &&
+             (df$temperature[p] > min(subset.SHE.data$temp))) {
             # within dataset range, do linear interpolation
-            lm.subspot <- stats::lm(SHE ~ temp, data = subspot)
+            lm.subset <- stats::lm(SHE ~ temp, data = subset.SHE.data)
             # interpolated temperature, calculated based on linear regression
             # (more accurate than simple linear interpolation with approx())
-            potinterp <-
-               lm.subspot$coefficients[2] * temperature + lm.subspot$coefficients[1]
-            ### CALC RETURN POTENTIAL
-            return(negifavs(potinterp, potential))
-         } else {
-            # outside dataset range, warning and return NA (we don't extrapolate)
-            warning("as.SHE(): the temperature you requested falls outside data range.")
-            return(NA)
+            pot.interp <-
+               lm.subset$coefficients[2] * df$temperature[p] + lm.subset$coefficients[1]
+            ### CALC POTENTIAL vs SHE
+            df$SHE[p] <-
+               ifelse(df$vacuum[p],
+                      pot.interp - df$potential[p],
+                      pot.interp + df$potential[p])
          }
       } else {
          # requested temperature does exist in dataset
-         ### CALC RETURN POTENTIAL
-         return(negifavs(subset(subspot, temp == temperature)$SHE, potential))
+          ### CALC POTENTIAL vs SHE
+         df$SHE[p] <-
+            ifelse(df$vacuum[p],
+                   subset(subset.SHE.data, temp == df$temperature[p])$SHE - df$potential[p],
+                   subset(subset.SHE.data, temp == df$temperature[p])$SHE + df$potential[p])
       }
-   # outer-most if-else
-   } else {
-      # supplied concentration is numeric
-      # note: all code inside this else is the same as inside the if,
-      # just for the case of numeric concentration
-      subspot <-
-         subset(subset(as.SHE.data,
-                       electrode == RefCanonicalName(scale)),
-                conc.num == concentration)
-      # if either "scale" or "concentration" are not found in the data, subspot will contain zero rows
-      if (dim(subspot)[1] == 0) {
-         warning("as.SHE(): Supplied scale or concentration does not exist in data. Returning NA.")
-         return(NA)
-      }
-      if (!any(subspot$temp == temperature)) {
-         # if sought temperature is not available in dataset, check that it falls inside
-         if ((temperature < max(subspot$temp)) && (temperature > min(subspot$temp))) {
-            # within dataset range, do linear interpolation
-            lm.subspot <- stats::lm(SHE ~ temp, data = subspot)
-            # interpolated temperature, calculated based on linear regression
-            # (more accurate than simple linear interpolation with approx())
-            potinterp <-
-               lm.subspot$coefficients[2] * temperature + lm.subspot$coefficients[1]
-            ### CALC RETURN POTENTIAL
-            return(negifavs(potinterp, potential))
-         } else {
-            # outside dataset range, warning and return NA (we don't extrapolate)
-            warning("as.SHE(): the temperature you requested falls outside data range.")
-            return(NA)
-         }
-      } else {
-         # requested temperature does exist in dataset
-         ### CALC RETURN POTENTIAL
-         return(negifavs(subset(subspot, temp == temperature)$SHE, potential))
-      }
-
    }
+
+   return(df$SHE)
 }
 
 

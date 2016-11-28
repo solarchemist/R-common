@@ -7,15 +7,19 @@
 RefCanonicalName(refname)
 }
 \arguments{
-\item{refname}{string}
+\item{refname}{string or a vector of strings}
 }
 \value{
-the canonical name or empty string
+vector with corresponding "canonical" name or empty string (if none found)
 }
 \description{
 Given a reference electrode label, this function returns its canonical name
 (as defined by this package).
 This function tries to match against as many variations as possible for each
 reference electrode.
+The entire point of this function is to decrease the mental load on the user
+by not requiring them to remember a particular label or name for each reference
+electrode, instead almost any sufficiently distinct label or string will still
+be correctly identified.
 }
 
