@@ -179,7 +179,11 @@ potentials.as.SHE <- function() {
                                 "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "30", "0.241", "6", "Sawyer1995",
                                 "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "35", "0.238", "6", "Sawyer1995",
                                 "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "40", "0.234", "6", "Sawyer1995",
-                                "AVS",       "",        "",     "",           "25", "-4.44", "7", "Trasatti1986"),
+                                "AVS",       "",        "",     "",           "25", "-4.44", "7", "Trasatti1986",
+                                "SHE",       "",        "",     "",      "-273.15",  "0.00",  "8", "Inzelt2013",
+                                "SHE",       "",        "",     "",            "0",  "0.00",  "8", "Inzelt2013",
+                                "SHE",       "",        "",     "",           "25",  "0.00",  "8", "Inzelt2013",
+                                "SHE",       "",        "",     "",          "580",  "0.00",  "8", "Inzelt2013"),
                            ncol = 8,
                            byrow = TRUE), stringsAsFactors = FALSE)
 
@@ -282,6 +286,12 @@ as.SHE <- function(potential,
    df$vacuum <- as.logical(FALSE)
    # add column to hold calc potential vs SHE
    df$SHE <-  as.numeric(NA)
+
+   # SHE scale special considerations
+   # 1. concentration is constant
+   if (any(df$scale == RefCanonicalName("SHE"))) {
+      df$concentration[which(df$scale == RefCanonicalName("SHE"))] <- ""
+   }
 
    # AVS scale special considerations
    # 1. concentration is meaningless
