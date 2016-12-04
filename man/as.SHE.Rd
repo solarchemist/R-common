@@ -4,13 +4,15 @@
 \alias{as.SHE}
 \title{Convert from electrochemical or electronic scale to SHE}
 \usage{
-as.SHE(potential, scale, concentration = "saturated", temperature = 25,
-  as.SHE.data = potentials.as.SHE())
+as.SHE(potential, scale, electrolyte = "", concentration = "saturated",
+  temperature = 25, as.SHE.data = potentials.as.SHE())
 }
 \arguments{
 \item{potential}{potential in volt}
 
 \item{scale}{name of the original scale}
+
+\item{electrolyte}{optional, specify electrolyte solution, e.g., "KCl(aq)". Must match value in \code{as.SHE.data$electrolyte}.}
 
 \item{concentration}{of electrolyte in mol/L, or as the string "saturated"}
 

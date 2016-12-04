@@ -57,7 +57,7 @@ RefCanonicalName <- function(refname) {
         "AgCl",
         "Silver-Silver chloride",
         "Silver chloride",
-        "SSC") # saturated silver-silver chloride is sometimes abbreviated SSC
+        "SSC") # Sometimes used abbr. for Saturated Silver Chloride
    electrode.system[["Hg2Cl2/Hg"]] <-
       c("Hg2Cl2/Hg",
         "Hg/Hg2Cl2",
@@ -76,6 +76,16 @@ RefCanonicalName <- function(refname) {
       c("Li",
         "Li/Li+",
         "Lithium")
+   electrode.system[["Na"]] <-
+      c("Na",
+        "Na+/Na",
+        "Na/Na+",
+        "Sodium")
+   electrode.system[["Mg"]] <-
+      c("Mg",
+        "Mg2+/Mg",
+        "Mg/Mg2+",
+        "Magnesium")
 
    # defining refname in this manner makes sure to get all possible combinations
    # but there might be a number of duplicates, but those we can
@@ -83,12 +93,15 @@ RefCanonicalName <- function(refname) {
    electrode <-
       data.frame(refname =
                     # here we create lower-case version of electrode.system,
-                    # and version with symbols (-/) subbed with spaces
+                    # a version with symbols (-/) subbed with spaces,
+                    # and a lower-case with symbols subbed with spaces
                     c(unname(unlist(electrode.system)),
                       tolower(unname(unlist(electrode.system))),
-                      gsub("[-/]", " ", unname(unlist(electrode.system)))),
+                      gsub("[-/]", " ", unname(unlist(electrode.system))),
+                      gsub("[-/]", " ", tolower(unname(unlist(electrode.system))))),
                  refcanon =
-                    rep(sub("[0-9]$", "", names(unlist(electrode.system))), 3),
+                    rep(sub("[0-9]$", "", names(unlist(electrode.system))),
+                        4), # this number needs to equal number of elements in c() above!
                  stringsAsFactors = FALSE)
    # detect and remove duplicates
    electrode <-
@@ -139,51 +152,56 @@ potentials.as.SHE <- function() {
    potentials <-
       as.data.frame(matrix(data =
                               # electrode # electrolyte # conc/M # conc label # temp # pot vs SHE # set id # ref
-                              c("AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "10", "0.215", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "15", "0.212", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "20", "0.208", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "25", "0.205", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "30", "0.201", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "35", "0.197", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "3.5", "3.5M at 25C", "40", "0.193", "1", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "10", "0.214", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "15", "0.209", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "20", "0.204", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "25", "0.199", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "30", "0.194", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "35", "0.189", "2", "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)", "4.2", "saturated",   "40", "0.184", "2", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "10", "0.336", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "15", "0.336", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "20", "0.336", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "25", "0.336", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "30", "0.335", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "35", "0.334", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "0.1", "0.1M at 25C", "40", "0.334", "3", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "1.0", "1.0M at 25C", "10", "0.287", "4", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "1.0", "1.0M at 25C", "20", "0.284", "4", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "1.0", "1.0M at 25C", "25", "0.283", "4", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "1.0", "1.0M at 25C", "30", "0.282", "4", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "1.0", "1.0M at 25C", "40", "0.278", "4", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "10", "0.256", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "15", "0.254", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "20", "0.252", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "25", "0.250", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "30", "0.248", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "35", "0.246", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "3.5", "3.5M at 25C", "40", "0.244", "5", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "10", "0.254", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "15", "0.251", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "20", "0.248", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "25", "0.244", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "30", "0.241", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "35", "0.238", "6", "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)", "4.2", "saturated",   "40", "0.234", "6", "Sawyer1995",
-                                "AVS",       "",        "",     "",           "25", "-4.44", "7", "Trasatti1986",
-                                "SHE",       "",        "",     "",      "-273.15",  "0.00",  "8", "Inzelt2013",
-                                "SHE",       "",        "",     "",            "0",  "0.00",  "8", "Inzelt2013",
-                                "SHE",       "",        "",     "",           "25",  "0.00",  "8", "Inzelt2013",
-                                "SHE",       "",        "",     "",          "580",  "0.00",  "8", "Inzelt2013"),
+                              c("AgCl/Ag",   "NaCl(aq)", "5.9", "saturated",   "25", "0.2630",  "9",  "CRC 97th ed., 97-05-22",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.215",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.212",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.208",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.205",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.201",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.197",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.193",   "1",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "10", "0.214",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "15", "0.209",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "20", "0.204",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "25", "0.199",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "30", "0.194",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "35", "0.189",   "2",  "Sawyer1995",
+                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "40", "0.184",   "2",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "10", "0.336",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "15", "0.336",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "20", "0.336",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "25", "0.336",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "30", "0.335",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "35", "0.334",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "40", "0.334",   "3",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "10", "0.287",   "4",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "20", "0.284",   "4",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "25", "0.283",   "4",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "30", "0.282",   "4",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "40", "0.278",   "4",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.256",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.254",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.252",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.250",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.248",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.246",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.244",   "5",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "10", "0.254",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "15", "0.251",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "20", "0.248",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "25", "0.244",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "30", "0.241",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "35", "0.238",   "6",  "Sawyer1995",
+                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "40", "0.234",   "6",  "Sawyer1995",
+                                "AVS",       "",         "",    "",            "25", "-4.44",   "7",  "Trasatti1986",
+                                "SHE",       "",         "",    "",       "-273.15", "0.00",    "8",  "Inzelt2013",
+                                "SHE",       "",         "",    "",             "0", "0.00",    "8",  "Inzelt2013",
+                                "SHE",       "",         "",    "",            "25", "0.00",    "8",  "Inzelt2013",
+                                # arbitrary max T=580C (temp at which sodalime glass loses rigidity)
+                                "SHE",       "",         "",    "",           "580", "0.00",    "8",  "Inzelt2013",
+                                "Li",        "",         "1.0", "1.0M at 25C", "25", "-3.0401", "10", "CRC 97th ed., 97-05-22",
+                                "Na",        "",         "1.0", "1.0M at 25C", "25", "-2.71",   "11", "CRC 97th ed., 97-05-22",
+                                "Mg",        "",         "1.0", "1.0M at 25C", "25", "-2.372",  "12", "CRC 97th ed., 97-05-22"),
                            ncol = 8,
                            byrow = TRUE), stringsAsFactors = FALSE)
 
@@ -204,7 +222,7 @@ potentials.as.SHE <- function() {
    # make room for a dE/dT column
    potentials$dEdT <- as.numeric(NA)
 
-   # calculate temperature coefficient (dE/dT) for each scale and concentration (ie. set id)
+   # calculate temperature coefficient (dE/dT) for each scale, concentration, and electrolyte (ie. set id)
    for (s in 1:length(unique(potentials$sid))) {
       # sid column eas added to data just to make this calculation here easier
       subspot <- potentials[which(potentials$sid == unique(potentials$sid)[s]), ]
@@ -227,6 +245,7 @@ potentials.as.SHE <- function() {
 #'
 #' @param potential potential in volt
 #' @param scale name of the original scale
+#' @param electrolyte optional, specify electrolyte solution, e.g., "KCl(aq)". Must match value in \code{as.SHE.data$electrolyte}.
 #' @param concentration of electrolyte in mol/L, or as the string "saturated"
 #' @param temperature of system in degrees Celsius
 #' @param as.SHE.data dataframe with dataset
@@ -235,6 +254,7 @@ potentials.as.SHE <- function() {
 #' @export
 as.SHE <- function(potential,
                    scale,
+                   electrolyte = "",
                    concentration = "saturated",
                    temperature = 25,
                    as.SHE.data = potentials.as.SHE()) {
@@ -251,25 +271,27 @@ as.SHE <- function(potential,
    }
 
    arglength <- length(potential)
-   # make the concentration and temperature args to this same length,
+   # make the args concentration, temperature and electrolyte this same length,
    # unless the user supplied them (only necessary for > 1)
    if (arglength > 1) {
       # handle two cases:
-      # 1. user did not touch concentration or temperature args.
+      # 1. user did not touch concentration, temperature and electrolyte args.
       #    Assume they forgot and reset their length and print a message
-      # 2. user did change concentration or temperature, but still failed to
+      # 2. user did change concentration or temperature or electrolyte, but still failed to
       #    ensure length equal to arglength. In this case, abort.
       # note: we can get the default value set in the function call using formals()
       if (identical(concentration, formals(as.SHE)$concentration) &
-          identical(temperature, formals(as.SHE)$temperature)) {
+          identical(temperature, formals(as.SHE)$temperature) &
+          identical(electrolyte, formals(as.SHE)$electrolyte)) {
          # case 1
          # message("NOTE: default concentration and temperature values used for all potentials and scales.")
-         message(paste0("Default concentration (", formals(as.SHE)$concentration, ") and default temperature (", formals(as.SHE)$temperature, "C) used for all supplied potential and scale values."))
+         message(paste0("Default concentration (", formals(as.SHE)$concentration, "), temperature (", formals(as.SHE)$temperature, "C) used for all supplied potential and scale values."))
          concentration <- rep(concentration, arglength)
          temperature <- rep(temperature, arglength)
+         electrolyte <- rep(electrolyte, arglength)
       } else {
          # case 2
-         stop("Arguments concentration and temperature must have same number of elements as potential and scale!")
+         stop("Concentration, temperature and electrolyte arguments must have the same number of elements as potential and scale!")
       }
    }
 
@@ -279,6 +301,7 @@ as.SHE <- function(potential,
    df <-
       data.frame(potential = potential,
                  scale = RefCanonicalName(scale),
+                 electrolyte = electrolyte,
                  concentration = concentration,
                  temperature = temperature,
                  stringsAsFactors = FALSE)
@@ -291,6 +314,7 @@ as.SHE <- function(potential,
    # 1. concentration is constant
    if (any(df$scale == RefCanonicalName("SHE"))) {
       df$concentration[which(df$scale == RefCanonicalName("SHE"))] <- ""
+      df$electrolyte[which(df$scale == RefCanonicalName("SHE"))] <- ""
    }
 
    # AVS scale special considerations
@@ -300,6 +324,7 @@ as.SHE <- function(potential,
       # concentration is meaningless for AVS (no electrolyte)
       # so for those rows, we'll reset it
       df$concentration[which(df$scale == RefCanonicalName("AVS"))] <- ""
+      df$electrolyte[which(df$scale == RefCanonicalName("AVS"))] <- ""
       df$vacuum[which(df$scale == RefCanonicalName("AVS"))] <- TRUE
    }
 
@@ -316,13 +341,58 @@ as.SHE <- function(potential,
                    electrode == df$scale[p])
       }
 
+      # use KCl(aq) as default to avoid aborting
+      # (good assumption at this point, as we always have KCl for the cases
+      #  where an electrode system has more than one electrolyte)
+      default.electrolyte <- "KCl(aq)"
+      # If this subset contains more than one unique electrolyte (e.g., NaCl and KCl)
+      # the user MUST have made a choice (in the "electrolyte" argument) that results
+      # in a single electrolyte remaining, or else we will warn and abort
+      if (length(unique(subset.SHE.data$electrolyte)) > 1) {
+         # data (in subset.SHE.data) contains more than one electrolyte
+         # if user did not change electrolyte arg value, use default and issue warning
+         if (identical(electrolyte, formals(as.SHE)$electrolyte)) {
+            warning(paste0("You did not specify an electrolyte, but more than one ",
+                           "is available for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
+                           "Using electrolyte", default.electrolyte))
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == default.electrolyte)
+         } else {
+            # else the user did change the electrolyte arg, use the user's value
+            subset.SHE.data <-
+               subset.SHE.data[which(subset.SHE.data$electrolyte == electrolyte), ]
+            print(subset.SHE.data)
+            # stop if the resulting dataframe contains no rows
+            if (dim(subset.SHE.data)[1] == 0) {
+               stop("Your choice of electrolyte does not match any data!")
+            }
+         }
+      } else {
+         # data only contains one electrolyte
+         # just check that it matches whatever the user supplied, if not,
+         # issue a warning (but don't abort, typically the user did not set it
+         # because they don't care and want whatever is in the data)
+         if (unique(subset.SHE.data$electrolyte) != electrolyte) {
+            warning(paste0("The requested electrolyte: ",
+                           ifelse(electrolyte == "", "<none specified>", electrolyte),
+                           " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
+                           "My data only lists one electrolyte for that scale - return value calculated on that basis."))
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == unique(subset.SHE.data$electrolyte))
+         } else {
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == electrolyte)
+         }
+      }
+
       # temperature
       # either happens to match a temperature in the dataset, or we interpolate
       # (under the assumption that potential varies linearly with temperature)
       if (!any(subset.SHE.data$temp == df$temperature[p])) {
          # sought temperature was not available in dataset, check that it falls inside
-         if ((df$temperature[p] < max(subset.SHE.data$temp)) &&
-             (df$temperature[p] > min(subset.SHE.data$temp))) {
+         # note: important to use less/more-than-or-equal in case data only contains one value
+         if ((df$temperature[p] <= max(subset.SHE.data$temp)) &&
+             (df$temperature[p] >= min(subset.SHE.data$temp))) {
             # within dataset range, do linear interpolation
             lm.subset <- stats::lm(SHE ~ temp, data = subset.SHE.data)
             # interpolated temperature, calculated based on linear regression
