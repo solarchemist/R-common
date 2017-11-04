@@ -26,4 +26,3 @@ Original author: John Fox, Department of Sociology, McMaster University, Hamilto
 http://cran.csiro.au/doc/Rnews/Rnews_2005-1.pdf
 http://finzi.psych.upenn.edu/R/Rhelp02a/archive/46843.html
 }
-

@@ -1,3 +1,19 @@
+#' Capitalise first letter in each word in string
+#'
+#' Copied verbatim from https://stackoverflow.com/a/6364905
+#' Also see R doc of base::toupper()
+#'
+#' @param x string of one or more words
+#'
+#' @return string
+#' @export
+simpleCap <- function(x) {
+   s <- strsplit(x, " ")[[1]]
+   paste(toupper(substring(s, 1, 1)), substring(s, 2),
+         sep = "", collapse = " ")
+}
+
+
 #' LoadRData2Variable
 #'
 #' This function loads R-data file into a variable instead of into the workspace.

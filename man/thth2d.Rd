@@ -17,4 +17,3 @@ d-spacings (numeric)
 \description{
 This function applies Bragg's law to calculate d-spacings from thth (n = 1)
 }
-

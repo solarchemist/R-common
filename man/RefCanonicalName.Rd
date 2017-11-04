@@ -22,4 +22,3 @@ by not requiring them to remember a particular label or name for each reference
 electrode, instead almost any sufficiently distinct label or string will still
 be correctly identified.
 }
-

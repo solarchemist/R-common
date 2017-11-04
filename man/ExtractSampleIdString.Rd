@@ -16,4 +16,3 @@ sampleid (character string)
 Extract sampleid from a string by utilising the fact that samepleid's
 adhere to a defined format.
 }
-

@@ -19,4 +19,3 @@ a string suitable for use with siunitx num{} command
 \description{
 Writing number with exponent (such as scientific notation) with uncertainty using siunitx
 }
-

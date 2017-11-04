@@ -15,4 +15,3 @@ potential in AVS scale (numeric)
 \description{
 Converts from SHE scale to absolute vacuum (AVS) scale
 }
-

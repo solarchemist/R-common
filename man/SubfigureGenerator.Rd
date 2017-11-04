@@ -30,4 +30,3 @@ Generate LaTeX subfigure code for a bunch of supplied image paths,
 subcaptions, label and subfigure layout.
 Supports splitting the figures over several pages or using landscape layout.
 }
-

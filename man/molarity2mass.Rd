@@ -21,4 +21,3 @@ You want to prepare a solution of known molarity and volume of
 a particular substance.
 This function calculates the required mass to weigh up.
 }
-

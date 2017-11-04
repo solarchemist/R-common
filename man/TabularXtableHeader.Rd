@@ -17,4 +17,3 @@ character string (with LaTeX escaping)
 \description{
 This function should be used together with \code{booktabs = TRUE}.
 }
-

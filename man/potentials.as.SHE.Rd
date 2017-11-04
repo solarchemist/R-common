@@ -25,4 +25,3 @@ This function just outputs a tidy dataframe with potential vs SHE for
 different scales, electrolytes, concentrations, and temperatures.
 Using data from literature.
 }
-

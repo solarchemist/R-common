@@ -15,4 +15,3 @@ Kelvin (numeric)
 \description{
 Converts temperature from Celsius to Kelvin.
 }
-

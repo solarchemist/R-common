@@ -20,4 +20,3 @@ The second arg is optional, defaults to "old" behaviour,
 but can be set to "dirname" for another behaviour.
 The second arg was added so as not to break older code.
 }
-

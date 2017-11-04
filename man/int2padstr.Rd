@@ -20,4 +20,3 @@ a string or a vector of strings
 Converts an integer or a vector of integers to a string
 of fixed length padded with a specified character (e.g., zeroes).
 }
-

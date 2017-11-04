@@ -27,4 +27,3 @@ potential in SHE scale
 Convert an arbitrary number of potentials against any known electrochemical
 scale (or the electronic vacuum scale) to potential vs SHE.
 }
-

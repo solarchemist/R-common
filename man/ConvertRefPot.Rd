@@ -19,4 +19,3 @@ potential in output reference scale (numeric)
 \description{
 Convert from one electrochemical scale to another
 }
-

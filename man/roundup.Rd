@@ -18,4 +18,3 @@ a number
 This function rounds UP to the nearest interval specified by "nearest"
 http://stackoverflow.com/questions/6461209/how-to-round-up-to-the-nearest-10-or-100-or-x
 }
-

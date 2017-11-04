@@ -17,4 +17,3 @@ This function loads R-data file into a variable instead of into the workspace.
 Works well when the R-data file contains only ONE variable.
 Not tested for when the R-data file contains more than one variable.
 }
-

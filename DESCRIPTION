@@ -1,10 +1,13 @@
 Package: common
 Type: Package
 Title: chepec common
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Description: Commonly used functions and scripts.
 Authors@R: person("Taha", "Ahmed", email = "taha@chepec.se", role = c("aut", "cre"))
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 5.0.1
-Imports: xtable
+RoxygenNote: 6.0.1
+Imports: 
+   xtable,
+   utils,
+   photoec

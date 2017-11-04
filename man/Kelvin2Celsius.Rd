@@ -15,4 +15,3 @@ degrees Celsius (numeric)
 \description{
 Converts from temperature in Kelvin to degrees Celsius
 }
-

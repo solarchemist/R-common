@@ -39,4 +39,3 @@ xtabWithAttributes <- GenericXtableSetAttributes(xtobject)
 xtabWithAttributes <- GenericXtableSetAttributes(xtobject, nxtdigits = c(0, 2, 2, 4))
 }
 }
-

@@ -21,4 +21,3 @@ This function creates a longtable header assuming
 that the LaTeX document will use the booktabs package.
 This function should not be used together with \code{booktabs = TRUE}
 }
-

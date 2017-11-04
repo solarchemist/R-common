@@ -19,4 +19,3 @@ I am not even sure this function is useful any longer.
 Kept for legacy purposes just in case some old code depends on it.
 This function was copied from R's documentation (see ?is.integer).
 }
-
