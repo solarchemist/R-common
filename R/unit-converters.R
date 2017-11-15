@@ -53,12 +53,43 @@ wavelength2num <- function(wavelength) {
 #'
 #' @param wavenumber  number or vector of numbers
 #'
-#' @return number ofr vector
+#' @return number or vector
 #' @export
 wavenum2length <- function(wavenumber) {
    wavelength <-
       10E6 / wavenumber
    return(wavelength)
+}
+
+
+#' Convert Pascal to Torr
+#'
+#' @param pascal numeric (note: please supply Pa, not kPa)
+#'
+#' @return torr, numeric
+#' @export
+pascal2torr <- function(pascal) {
+   # 1 Pascal == newton per square metre == kg per metre second squared
+   # 1 Torr == 1/760 atm
+   # 1 atm == 101325 Pascal
+   torr <- pascal / 101325 * 760
+   return(torr)
+}
+
+
+#' Convert Torr to Pascal
+#'
+#' @param torr numeric
+#'
+#' @return pascal, numeric (note returns Pa, not kPa)
+#' @export
+torr2pascal <- function(torr) {
+   # 1 Pascal == newton per square metre == kg per metre second squared
+   # 1 Torr == 1/760 atm
+   # 1 atm == 101325 Pascal
+   # torr <- pascal / 101325 * 760
+   pascal <- torr * 101325 / 760
+   return(pascal)
 }
 
 

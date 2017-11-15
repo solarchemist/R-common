@@ -10,7 +10,7 @@ wavenum2length(wavenumber)
 \item{wavenumber}{number or vector of numbers}
 }
 \value{
-number ofr vector
+number or vector
 }
 \description{
 Converts wavenumber (cm-1) to wavelength (nm)
