@@ -75,6 +75,7 @@ RefCanonicalName <- function(refname) {
    electrode.system[["Li"]] <-
       c("Li",
         "Li/Li+",
+        "Li+/Li",
         "Lithium")
    electrode.system[["Na"]] <-
       c("Na",
@@ -331,14 +332,34 @@ as.SHE <- function(potential,
    # now just work our way through df, line-by-line to determine potential as SHE
    # all necessary conditions should be recorded right here in df
    for (p in 1:dim(df)[1]) {
-      if (is.character(df$concentration[p])) {
-         subset.SHE.data <-
-            subset(subset(as.SHE.data, conc.string == df$concentration[p]),
-                   electrode == df$scale[p])
+      # Fixed a bug 2018-03-04
+      # Issue: if scale was {Li,Na,Mg} the default electrolyte string "saturated" caused
+      # zero rows to be returned in the subset.SHE.data match, with error returned to user.
+      # Fixed by making the matching more step-wise:
+      # + first, subset against electrode scale. If only one row, done. If more,
+      # + subset against either conc.string or conc.num. Stop if zero rows (error), otherwise proceed.
+      subset.scale <- subset(as.SHE.data, electrode == df$scale[p])
+      if (dim(subset.scale)[1] > 1) {
+         # continue matching, now against conc.string or conc.num
+         if (is.character(df$concentration[p])) {
+            subset.concentration <-
+               subset(subset.scale, conc.string == df$concentration[p])
+         } else {
+            subset.concentration <-
+               subset(subset.scale, conc.num == df$concentration[p])
+         }
+         # stop if the resulting dataframe after matching contains no rows
+         if (dim(subset.concentration)[1] == 0) {
+            stop("Sorry, it seems we failed to find any matching entries in potentials.as.SHE().")
+         }
+         # Note: it's ok at this point if the resulting df contains more than one row as
+         #       more matching will be done below
+         # If we haven't had reason to stop(), we should be good
+         # just housekeeping: rename the variable so we don't have to edit code below
+         subset.SHE.data <- subset.concentration
       } else {
-         subset.SHE.data <-
-            subset(subset(as.SHE.data, conc.num == df$concentration[p]),
-                   electrode == df$scale[p])
+         # just housekeeping: rename the variable so we don't have to change the code that follows
+         subset.SHE.data <- subset.scale
       }
 
       # use KCl(aq) as default to avoid aborting
@@ -354,13 +375,14 @@ as.SHE <- function(potential,
          if (identical(electrolyte, formals(as.SHE)$electrolyte)) {
             warning(paste0("You did not specify an electrolyte, but more than one ",
                            "is available for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
-                           "Using electrolyte", default.electrolyte))
+                           "Using electrolyte: ", default.electrolyte))
             subset.SHE.data <-
                subset(subset.SHE.data, electrolyte == default.electrolyte)
          } else {
             # else the user did change the electrolyte arg, use the user's value
             subset.SHE.data <-
                subset.SHE.data[which(subset.SHE.data$electrolyte == electrolyte), ]
+            # print only for debugging - disable before production!
             print(subset.SHE.data)
             # stop if the resulting dataframe contains no rows
             if (dim(subset.SHE.data)[1] == 0) {
