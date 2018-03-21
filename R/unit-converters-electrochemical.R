@@ -302,7 +302,14 @@ as.SHE <- function(potential,
    if (length(potential) == 0 | length(scale) == 0) {
       stop("Arguments potential or scale cannot be empty!")
    } else if (length(potential) != length(scale)) {
-      stop("Arguments potential and scale must have equal number of elements")
+      # stop, unless length(scale) == 1 where we will assume it should be recycled
+      if (length(scale) == 1) {
+         message("Argument <scale> has unit length. Recycling it to match length of <potential>. ")
+         scale <- rep(scale, length(potential))
+      } else {
+         stop(paste0("Correspondence between the supplied potentials and scales could not be worked out.\n",
+                     "Please make sure the number of elements in each match, or make <scale> unit length."))
+      }
    }
 
    arglength <- length(potential)
@@ -428,9 +435,11 @@ as.SHE <- function(potential,
          # just check that it matches whatever the user supplied, if not,
          # issue a warning (but don't abort, typically the user did not set it
          # because they don't care and want whatever is in the data)
-         if (unique(subset.SHE.data$electrolyte) != electrolyte) {
+         if (any(subset.SHE.data$electrolyte != electrolyte)) {
             warning(paste0("The requested electrolyte: ",
-                           ifelse(electrolyte == "", "<none specified>", electrolyte),
+                           ifelse(any(electrolyte == ""),
+                                  "<none specified>",
+                                  electrolyte),
                            " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
                            "My data only lists one electrolyte for that scale - return value calculated on that basis."))
             subset.SHE.data <-
@@ -505,7 +514,14 @@ from.SHE <- function(potential,
    if (length(potential) == 0 | length(scale) == 0) {
       stop("Arguments potential or scale cannot be empty!")
    } else if (length(potential) != length(scale)) {
-      stop("Arguments potential and scale must have the same number of elements")
+      # stop, unless length(scale) == 1 where we will assume it should be recycled
+      if (length(scale) == 1) {
+         message("Argument <scale> has unit length. Recycling it to match length of <potential>. ")
+         scale <- rep(scale, length(potential))
+      } else {
+         stop(paste0("Correspondence between the supplied potentials and scales could not be worked out.\n",
+                     "Please make sure the number of elements in each match, or make <scale> unit length."))
+      }
    }
 
    arglength <- length(potential)
@@ -513,7 +529,7 @@ from.SHE <- function(potential,
    # unless the user supplied them (only necessary for > 1)
    if (arglength > 1) {
       # handle two cases:
-      # 1. user did not touch concentration, temperature and electrolyte args.
+      # 1. user did not touch concentration, temperature or electrolyte args.
       #    Assume they forgot and reset their length and print a message
       # 2. user did change concentration or temperature or electrolyte, but still failed to
       #    ensure length equal to arglength. In this case, abort.
@@ -618,9 +634,11 @@ from.SHE <- function(potential,
          # just check that it matches whatever the user supplied, if not,
          # issue a warning (but don't abort, typically the user did not set it
          # because they don't care and want whatever is in the data)
-         if (unique(subset.SHE.data$electrolyte) != electrolyte) {
+         if (any(subset.SHE.data$electrolyte != electrolyte)) {
             warning(paste0("The requested electrolyte: ",
-                           ifelse(electrolyte == "", "<none specified>", electrolyte),
+                           ifelse(any(electrolyte == ""),
+                                  "<none specified>",
+                                  electrolyte),
                            " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
                            "My data only lists one electrolyte for that scale - return value calculated on that basis."))
             subset.SHE.data <-
@@ -645,7 +663,7 @@ from.SHE <- function(potential,
             # (more accurate than simple linear interpolation with approx())
             pot.interp <-
                lm.subset$coefficients[2] * df$temperature[p] + lm.subset$coefficients[1]
-            message("Calc potential using interp temperature")
+            # message("Calc potential using interp temperature")
             ### CALC POTENTIAL vs requested scale
             if (df$scale[p] == common::RefCanonicalName("AVS")) {
                # message("Target scale is AVS")
@@ -660,7 +678,7 @@ from.SHE <- function(potential,
       } else {
          # requested temperature does exist in dataset
          ### CALC POTENTIAL vs requested scale
-         message("Calc potential using exact temperature match")
+         # message("Calc potential using exact temperature match")
          if (df$scale[p] == common::RefCanonicalName("AVS")) {
             # message("Target scale is AVS")
             df$potentialvsscale[p] <-
