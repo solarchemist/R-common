@@ -89,7 +89,7 @@ RefCanonicalName <- function(refname) {
         "Mg/Mg2+",
         "Magnesium")
 
-   # if no argument or empty string supplied as arg, return the the entire list as df
+   # if no argument or empty string supplied as arg, return the entire list as df
    # to give the user a nice overview of all available options
    if (missing(refname) || refname == "") {
       max.row.length <- 0
@@ -185,60 +185,61 @@ potentials.as.SHE <- function() {
    # all potentials vs SHE
 
    potentials <-
-      as.data.frame(matrix(data =
-                              # electrode # electrolyte # conc/M # conc label # temp # pot vs SHE # set id # ref
-                              c("AgCl/Ag",   "NaCl(aq)", "5.9", "saturated",   "25", "0.2630",  "9",  "CRC 97th ed., 97-05-22",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.215",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.212",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.208",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.205",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.201",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.197",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.193",   "1",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "10", "0.214",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "15", "0.209",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "20", "0.204",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "25", "0.199",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "30", "0.194",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "35", "0.189",   "2",  "Sawyer1995",
-                                "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "40", "0.184",   "2",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "10", "0.336",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "15", "0.336",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "20", "0.336",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "25", "0.336",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "30", "0.335",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "35", "0.334",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "40", "0.334",   "3",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "10", "0.287",   "4",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "20", "0.284",   "4",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "25", "0.283",   "4",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "30", "0.282",   "4",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "40", "0.278",   "4",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.256",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.254",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.252",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.250",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.248",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.246",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.244",   "5",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "10", "0.254",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "15", "0.251",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "20", "0.248",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "25", "0.244",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "30", "0.241",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "35", "0.238",   "6",  "Sawyer1995",
-                                "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "40", "0.234",   "6",  "Sawyer1995",
-                                "AVS",       "",         "",    "",            "25", "-4.44",   "7",  "Trasatti1986",
-                                "SHE",       "",         "",    "",       "-273.15", "0.00",    "8",  "Inzelt2013",
-                                "SHE",       "",         "",    "",             "0", "0.00",    "8",  "Inzelt2013",
-                                "SHE",       "",         "",    "",            "25", "0.00",    "8",  "Inzelt2013",
-                                # arbitrary max T=580C (temp at which sodalime glass loses rigidity)
-                                "SHE",       "",         "",    "",           "580", "0.00",    "8",  "Inzelt2013",
-                                "Li",        "",         "1.0", "1.0M at 25C", "25", "-3.0401", "10", "CRC 97th ed., 97-05-22",
-                                "Na",        "",         "1.0", "1.0M at 25C", "25", "-2.71",   "11", "CRC 97th ed., 97-05-22",
-                                "Mg",        "",         "1.0", "1.0M at 25C", "25", "-2.372",  "12", "CRC 97th ed., 97-05-22"),
-                           ncol = 8,
-                           byrow = TRUE), stringsAsFactors = FALSE)
+      as.data.frame(
+         matrix(data =
+                   # electrode # electrolyte # conc/M # conc label # temp # pot vs SHE # set id # ref
+                   c("AgCl/Ag",   "NaCl(aq)", "5.9", "saturated",   "25", "0.2630",  "9",  "CRC 97th ed., 97-05-22",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.215",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.212",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.208",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.205",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.201",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.197",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.193",   "1",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "10", "0.214",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "15", "0.209",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "20", "0.204",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "25", "0.199",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "30", "0.194",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "35", "0.189",   "2",  "Sawyer1995",
+                     "AgCl/Ag",   "KCl(aq)",  "4.2", "saturated",   "40", "0.184",   "2",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "10", "0.336",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "15", "0.336",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "20", "0.336",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "25", "0.336",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "30", "0.335",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "35", "0.334",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "0.1", "0.1M at 25C", "40", "0.334",   "3",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "10", "0.287",   "4",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "20", "0.284",   "4",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "25", "0.283",   "4",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "30", "0.282",   "4",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "1.0", "1.0M at 25C", "40", "0.278",   "4",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "10", "0.256",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "15", "0.254",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "20", "0.252",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "25", "0.250",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "30", "0.248",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "35", "0.246",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "3.5", "3.5M at 25C", "40", "0.244",   "5",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "10", "0.254",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "15", "0.251",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "20", "0.248",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "25", "0.244",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "30", "0.241",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "35", "0.238",   "6",  "Sawyer1995",
+                     "Hg2Cl2/Hg", "KCl(aq)",  "4.2", "saturated",   "40", "0.234",   "6",  "Sawyer1995",
+                     "AVS",       "",         "",    "",            "25", "-4.44",   "7",  "Trasatti1986",
+                     "SHE",       "",         "",    "",       "-273.15", "0.00",    "8",  "Inzelt2013",
+                     "SHE",       "",         "",    "",             "0", "0.00",    "8",  "Inzelt2013",
+                     "SHE",       "",         "",    "",            "25", "0.00",    "8",  "Inzelt2013",
+                     # arbitrary max T=580C (temp at which sodalime glass loses rigidity)
+                     "SHE",       "",         "",    "",           "580", "0.00",    "8",  "Inzelt2013",
+                     "Li",        "",         "1.0", "1.0M at 25C", "25", "-3.0401", "10", "CRC 97th ed., 97-05-22",
+                     "Na",        "",         "1.0", "1.0M at 25C", "25", "-2.71",   "11", "CRC 97th ed., 97-05-22",
+                     "Mg",        "",         "1.0", "1.0M at 25C", "25", "-2.372",  "12", "CRC 97th ed., 97-05-22"),
+                ncol = 8,
+                byrow = TRUE), stringsAsFactors = FALSE)
 
    colnames(potentials) <-
       c("electrode",
@@ -297,24 +298,23 @@ as.SHE <- function(potential,
    # if the supplied temperature does not exist in the data, this function will attempt to interpolate
    # note that concentration has to match, no interpolation is attempted for conc
 
-   # make this work for arbitrary-length vectors of potential and scale
-   # make sure potential and scale args have the same length
+   # potential and scale vectors supplied by user could have arbitrary length
+   # just make sure potential and scale args have the same length (or length(scale) == 1)
    if (length(potential) == 0 | length(scale) == 0) {
-      stop("Arguments potential or scale cannot be empty!")
+      stop("Potential or scale arguments cannot be empty!")
    } else if (length(potential) != length(scale)) {
       # stop, unless length(scale) == 1 where we will assume it should be recycled
       if (length(scale) == 1) {
-         message("Argument <scale> has unit length. Recycling it to match length of <potential>. ")
+         message("Arg <scale> has unit length. We'll recycle it to match length of <potential>.")
          scale <- rep(scale, length(potential))
       } else {
-         stop(paste0("Correspondence between the supplied potentials and scales could not be worked out.\n",
-                     "Please make sure the number of elements in each match, or make <scale> unit length."))
+         stop("Length of <potential> and <scale> must be equal OR <scale> may be unit length.")
       }
    }
 
    arglength <- length(potential)
    # make the args concentration, temperature and electrolyte this same length,
-   # unless the user supplied them (only necessary for > 1)
+   # unless the user supplied them (only necessary for length > 1)
    if (arglength > 1) {
       # handle two cases:
       # 1. user did not touch concentration, temperature and electrolyte args.
@@ -327,7 +327,7 @@ as.SHE <- function(potential,
           identical(electrolyte, formals(as.SHE)$electrolyte)) {
          # case 1
          # message("NOTE: default concentration and temperature values used for all potentials and scales.")
-         message(paste0("Default concentration (", formals(as.SHE)$concentration, "), temperature (", formals(as.SHE)$temperature, "C) used for all supplied potential and scale values."))
+         message(paste0("The default concentration (", formals(as.SHE)$concentration, ") and temperature (", formals(as.SHE)$temperature, "C) will be assumed for all your potential/scale values."))
          concentration <- rep(concentration, arglength)
          temperature <- rep(temperature, arglength)
          electrolyte <- rep(electrolyte, arglength)
@@ -340,7 +340,7 @@ as.SHE <- function(potential,
    ## we can now safely assume that length(<args>) == arglength
    # place args into a single dataframe
    # this way, we can correlate columns to each other by row
-   df <-
+   dfargs <-
       data.frame(potential = potential,
                  scale = common::RefCanonicalName(scale),
                  electrolyte = electrolyte,
@@ -348,139 +348,155 @@ as.SHE <- function(potential,
                  temperature = temperature,
                  stringsAsFactors = FALSE)
    # add column to keep track of vacuum scale
-   df$vacuum <- as.logical(FALSE)
+   # dfargs$vacuum <- as.logical(FALSE)
    # add column to hold calc potential vs SHE
-   df$SHE <-  as.numeric(NA)
+   dfargs$SHE <-  as.numeric(NA)
+
+   ## From here on, ONLY access the arguments via this dataframe
+   ## That is, use dfargs$electrolyte, NOT electrolyte
 
    # SHE scale special considerations
-   # 1. concentration is constant
-   if (any(df$scale == common::RefCanonicalName("SHE"))) {
-      df$concentration[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
-      df$electrolyte[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
+   # 1. concentration is constant for SHE
+   if (any(dfargs$scale == common::RefCanonicalName("SHE"))) {
+      dfargs$concentration[which(dfargs$scale == common::RefCanonicalName("SHE"))] <- ""
+      dfargs$electrolyte[which(dfargs$scale == common::RefCanonicalName("SHE"))] <- ""
    }
 
    # AVS scale special considerations
-   # 1. concentration is meaningless
-   # 2. direction is opposite of electrochemical scales, requiring change of sign
-   if (any(df$scale == common::RefCanonicalName("AVS"))) {
-      # concentration is meaningless for AVS (no electrolyte)
-      # so for those rows, we'll reset it
-      df$concentration[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
-      df$electrolyte[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
-      df$vacuum[which(df$scale == common::RefCanonicalName("AVS"))] <- TRUE
+   # 1. concentration is meaningless for AVS
+   if (any(dfargs$scale == common::RefCanonicalName("AVS"))) {
+      # concentration is meaningless for AVS (no electrolyte) so for those rows, we'll reset it
+      dfargs$concentration[which(dfargs$scale == common::RefCanonicalName("AVS"))] <- ""
+      dfargs$electrolyte[which(dfargs$scale == common::RefCanonicalName("AVS"))] <- ""
+      # dfargs$vacuum[which(dfargs$scale == common::RefCanonicalName("AVS"))] <- TRUE
    }
 
-   # now just work our way through df, line-by-line to determine potential as SHE
-   # all necessary conditions should be recorded right here in df
-   for (p in 1:dim(df)[1]) {
-      # Fixed a bug 2018-03-04
-      # Issue: if scale was {Li,Na,Mg} the default electrolyte string "saturated" caused
-      # zero rows to be returned in the subset.SHE.data match, with error returned to user.
-      # Fixed by making the matching more step-wise:
-      # + first, subset against electrode scale. If only one row, done. If more,
-      # + subset against either conc.string or conc.num. Stop if zero rows (error), otherwise proceed.
-      subset.scale <- subset(as.SHE.data, electrode == df$scale[p])
-      if (dim(subset.scale)[1] > 1) {
+   # now just work our way through dfargs, line-by-line to determine potential as SHE
+   # all necessary conditions should be recorded right here in dfargs
+   for (p in 1:dim(dfargs)[1]) {
+      ## WE ARE NOW WORKING ROW-BY-ROW THROUGH THE SUPPLIED ARGUMENTS IN dfargs
+      # Step-wise matching:
+      # + first, we subset against electrode scale. If dataset only has one row, done. Else,
+      # + we subset against either conc.string or conc.num. Stop if zero rows in dataset (error), otherwise proceed.
+      # Our "dataset" is the literature data supplied via the argument as.SHE.data
+      this.data.scale <- subset(as.SHE.data, electrode == dfargs$scale[p])
+      # subset.scale <- subset(as.SHE.data, electrode == dfargs$scale[p])
+      if (dim(this.data.scale)[1] > 1) {
          # continue matching, now against conc.string or conc.num
-         if (is.character(df$concentration[p])) {
-            subset.concentration <-
-               subset(subset.scale, conc.string == df$concentration[p])
+         if (is.character(dfargs$concentration[p])) {
+            this.data.concentration <-
+            # subset.concentration <-
+               subset(this.data.scale, conc.string == dfargs$concentration[p])
          } else {
-            subset.concentration <-
-               subset(subset.scale, conc.num == df$concentration[p])
+            this.data.concentration <-
+            # subset.concentration <-
+               subset(this.data.scale, conc.num == dfargs$concentration[p])
          }
          # stop if the resulting dataframe after matching contains no rows
-         if (dim(subset.concentration)[1] == 0) {
-            stop("Sorry, it seems we failed to find any matching entries in potentials.as.SHE().")
+         if (dim(this.data.concentration)[1] == 0) {
+            stop(paste0("Failed to find any matching entries in dataset for ",
+                        paste(dfargs[p, ], collapse = " ", sep = "")))
          }
-         # Note: it's ok at this point if the resulting df contains more than one row as
+         # Note: it's ok at this point if the resulting dataset contains more than one row as
          #       more matching will be done below
          # If we haven't had reason to stop(), we should be good
          # just housekeeping: rename the variable so we don't have to edit code below
-         subset.SHE.data <- subset.concentration
+         this.SHE.data <- this.data.concentration
+         # subset.SHE.data <- subset.concentration
       } else {
-         # just housekeeping: rename the variable so we don't have to change the code that follows
-         subset.SHE.data <- subset.scale
+         # just housekeeping again
+         this.SHE.data <- this.data.scale
+         # subset.SHE.data <- subset.scale
       }
 
-      # use KCl(aq) as default to avoid aborting
-      # (good assumption at this point, as we always have KCl for the cases
-      #  where an electrode system has more than one electrolyte)
-      default.electrolyte <- "KCl(aq)"
-      # If this subset contains more than one unique electrolyte (e.g., NaCl and KCl)
-      # the user MUST have made a choice (in the "electrolyte" argument) that results
-      # in a single electrolyte remaining, or else we will warn and abort
-      if (length(unique(subset.SHE.data$electrolyte)) > 1) {
-         # data (in subset.SHE.data) contains more than one electrolyte
-         # if user did not change electrolyte arg value, use default and issue warning
-         if (identical(electrolyte, formals(as.SHE)$electrolyte)) {
-            warning(paste0("You did not specify an electrolyte, but more than one ",
-                           "is available for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
-                           "Using electrolyte: ", default.electrolyte))
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == default.electrolyte)
+
+      ## Electrolyte
+      # == We would like to transparently handle the following scenario:
+      # || if the user did not specify electrolyte solution (which we can check by using formals())
+      # || but the dataset (after subsetting against scale and concentration above) still contains
+      # || more than one electrolyte
+      # >> Approach: we'll specify a "fallback" electrolyte, KCl (usually that's what the user wants)
+      # >> and inform/warn about it
+
+      # KCl is a good assumption, as we always have KCl
+      # for the cases where an electrode system has more than one electrolyte
+      fallback.electrolyte <- "KCl(aq)"
+      if (length(unique(this.SHE.data$electrolyte)) > 1) {
+         if (formals(as.SHE)$electrolyte == "") {
+            warning(paste0("More than one electrolyte ",
+                           "available for E(", dfargs$scale[p], ") in dataset. ",
+                           "I'll assume you want ", fallback.electrolyte, "."))
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == fallback.electrolyte)
          } else {
             # else the user did change the electrolyte arg, use the user's value
-            subset.SHE.data <-
-               subset.SHE.data[which(subset.SHE.data$electrolyte == electrolyte), ]
-            # print only for debugging - disable before production!
-            print(subset.SHE.data)
-            # stop if the resulting dataframe contains no rows
-            if (dim(subset.SHE.data)[1] == 0) {
-               stop("Your choice of electrolyte does not match any data!")
-            }
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == dfargs$electrolyte[p])
+            # but stop if the resulting dataframe contains no rows
+            if (dim(this.SHE.data)[1] == 0) stop("Your choice of electrolyte does not match any data!")
          }
       } else {
-         # data only contains one electrolyte
-         # just check that it matches whatever the user supplied, if not,
-         # issue a warning (but don't abort, typically the user did not set it
-         # because they don't care and want whatever is in the data)
-         if (any(subset.SHE.data$electrolyte != electrolyte)) {
-            warning(paste0("The requested electrolyte: ",
-                           ifelse(any(electrolyte == ""),
-                                  "<none specified>",
-                                  electrolyte),
-                           " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
-                           "My data only lists one electrolyte for that scale - return value calculated on that basis."))
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == unique(subset.SHE.data$electrolyte))
+         # dataset contains only one unique electrolyte
+         # again, check if electrolyte in arg matches the one in dataset
+         # if it does, great, if it does not, print a message and use it anyway
+         if (unique(this.SHE.data$electrolyte) == dfargs$electrolyte[p]) {
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == dfargs$electrolyte[p])
          } else {
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == electrolyte)
+            # whatever electrolyte the user supplied does not match what's left in the datasubset
+            # but at this point the user is probably better served by returning the electrolyte we have
+            # along with an informative message (that's the only reason for the if-else below)
+            electrolytes.in.subset <-
+               unique(subset(as.SHE.data, electrode == dfargs$scale[p])$electrolyte)
+            if (dfargs$electrolyte[p] == "") {
+               message(
+                  paste0('Electrolyte "" (empty string) not in dataset for E(',
+                         dfargs$scale[p], '). ',
+                         'These electrolytes are: ',
+                         paste(electrolytes.in.subset, collapse = ', or '), '.',
+                         "I'll assume you want ", fallback.electrolyte, ".")
+                  )
+            } else {
+               message(paste0("Electrolyte ", dfargs$electrolyte[p], " not in dataset for E(",
+                              dfargs$scale[p], "). ",
+                              "These electrolytes are: ",
+                              paste(electrolytes.in.subset, collapse = ", or "), ".",
+                              "I'll assume you want ", fallback.electrolyte, ".")
+                       )
+            }
          }
       }
 
       # temperature
       # either happens to match a temperature in the dataset, or we interpolate
       # (under the assumption that potential varies linearly with temperature)
-      if (!any(subset.SHE.data$temp == df$temperature[p])) {
+      if (!any(this.SHE.data$temp == dfargs$temperature[p])) {
          # sought temperature was not available in dataset, check that it falls inside
          # note: important to use less/more-than-or-equal in case data only contains one value
-         if ((df$temperature[p] <= max(subset.SHE.data$temp)) &&
-             (df$temperature[p] >= min(subset.SHE.data$temp))) {
+         if ((dfargs$temperature[p] <= max(this.SHE.data$temp)) && (dfargs$temperature[p] >= min(this.SHE.data$temp))) {
             # within dataset range, do linear interpolation
-            lm.subset <- stats::lm(SHE ~ temp, data = subset.SHE.data)
+            lm.subset <- stats::lm(SHE ~ temp, data = this.SHE.data)
             # interpolated temperature, calculated based on linear regression
             # (more accurate than simple linear interpolation with approx())
             pot.interp <-
-               lm.subset$coefficients[2] * df$temperature[p] + lm.subset$coefficients[1]
+               lm.subset$coefficients[2] * dfargs$temperature[p] + lm.subset$coefficients[1]
             ### CALC POTENTIAL vs SHE
-            df$SHE[p] <-
-               ifelse(df$vacuum[p],
-                      pot.interp - df$potential[p],
-                      pot.interp + df$potential[p])
+            dfargs$SHE[p] <-
+               ifelse(dfargs$scale[p] == "AVS",
+                      pot.interp - dfargs$potential[p],
+                      pot.interp + dfargs$potential[p])
          }
       } else {
          # requested temperature does exist in dataset
           ### CALC POTENTIAL vs SHE
-         df$SHE[p] <-
-            ifelse(df$vacuum[p],
-                   subset(subset.SHE.data, temp == df$temperature[p])$SHE - df$potential[p],
-                   subset(subset.SHE.data, temp == df$temperature[p])$SHE + df$potential[p])
+         dfargs$SHE[p] <-
+            ifelse(dfargs$scale[p] == "AVS",
+                   subset(this.SHE.data, temp == dfargs$temperature[p])$SHE - dfargs$potential[p],
+                   subset(this.SHE.data, temp == dfargs$temperature[p])$SHE + dfargs$potential[p])
       }
    }
 
-   return(df$SHE)
+   return(dfargs$SHE)
 }
 
 
@@ -509,27 +525,29 @@ from.SHE <- function(potential,
                      temperature = 25,
                      as.SHE.data = potentials.as.SHE()) {
 
-   # make this work for arbitrary-length vectors of potential and scale
-   # make sure potential and scale args have the same length
+   # if the supplied temperature does not exist in the data, this function will attempt to interpolate
+   # note that concentration has to match, no interpolation is attempted for conc
+
+   # potential and scale vectors supplied by user could have arbitrary length
+   # just make sure potential and scale args have the same length (or length(scale) == 1)
    if (length(potential) == 0 | length(scale) == 0) {
-      stop("Arguments potential or scale cannot be empty!")
+      stop("Potential or scale arguments cannot be empty!")
    } else if (length(potential) != length(scale)) {
       # stop, unless length(scale) == 1 where we will assume it should be recycled
       if (length(scale) == 1) {
-         message("Argument <scale> has unit length. Recycling it to match length of <potential>. ")
+         message("Arg <scale> has unit length. We'll recycle it to match length of <potential>.")
          scale <- rep(scale, length(potential))
       } else {
-         stop(paste0("Correspondence between the supplied potentials and scales could not be worked out.\n",
-                     "Please make sure the number of elements in each match, or make <scale> unit length."))
+         stop("Length of <potential> and <scale> must be equal OR <scale> may be unit length.")
       }
    }
 
    arglength <- length(potential)
    # make the args concentration, temperature and electrolyte this same length,
-   # unless the user supplied them (only necessary for > 1)
+   # unless the user supplied them (only necessary for length > 1)
    if (arglength > 1) {
       # handle two cases:
-      # 1. user did not touch concentration, temperature or electrolyte args.
+      # 1. user did not touch concentration, temperature and electrolyte args.
       #    Assume they forgot and reset their length and print a message
       # 2. user did change concentration or temperature or electrolyte, but still failed to
       #    ensure length equal to arglength. In this case, abort.
@@ -538,7 +556,7 @@ from.SHE <- function(potential,
           identical(temperature, formals(from.SHE)$temperature) &
           identical(electrolyte, formals(from.SHE)$electrolyte)) {
          # case 1
-         message(paste0("Default concentration (", formals(from.SHE)$concentration, "), temperature (", formals(from.SHE)$temperature, "C) used for all supplied potential and scale values."))
+         message(paste0("The default concentration (", formals(from.SHE)$concentration, ") and temperature (", formals(from.SHE)$temperature, "C) will be assumed for all your potential/scale values."))
          concentration <- rep(concentration, arglength)
          temperature <- rep(temperature, arglength)
          electrolyte <- rep(electrolyte, arglength)
@@ -551,147 +569,154 @@ from.SHE <- function(potential,
    ## we can now safely assume that length(<args>) == arglength
    # place args into a single dataframe
    # this way, we can correlate columns to each other by row
-   df <-
+   dfargs <-
       data.frame(potential = potential, # vs SHE
                  scale = common::RefCanonicalName(scale), # target scale
                  electrolyte = electrolyte,
                  concentration = concentration,
                  temperature = temperature,
                  stringsAsFactors = FALSE)
-   # # add column to keep track of vacuum scale
-   # df$vacuum <- as.logical(FALSE)
-   # # add column to hold calc potential vs target scale
-   # df$targetscale <-  as.numeric(NA)
 
-   ## Special considerations
-   # SHE scale independent of concentration, per definition
-   if (any(df$scale == common::RefCanonicalName("SHE"))) {
-      df$concentration[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
-      df$electrolyte[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
-   }
-   # AVS scale: concentration is meaningless (no electrolyte)
-   if (any(df$scale == common::RefCanonicalName("AVS"))) {
-      df$concentration[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
-      df$electrolyte[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
+   ## From here on, ONLY access the arguments via this dataframe
+   ## That is, use dfargs$electrolyte, NOT electrolyte (and so on)
+
+   # SHE scale special considerations
+   # 1. concentration is constant for SHE
+   if (any(dfargs$scale == common::RefCanonicalName("SHE"))) {
+      dfargs$concentration[which(dfargs$scale == common::RefCanonicalName("SHE"))] <- ""
+      dfargs$electrolyte[which(dfargs$scale == common::RefCanonicalName("SHE"))] <- ""
    }
 
-   for (p in 1:dim(df)[1]) {
-      # First, subset against electrode scale. If as.SHE.data only contains one row
-      # for this electrode scale we are DONE. If not, proceed to subset against concentration
-      subset.scale <- subset(as.SHE.data, electrode == df$scale[p])
-      if (dim(subset.scale)[1] > 1) {
+   # AVS scale special considerations
+   # 1. concentration is meaningless for AVS
+   if (any(dfargs$scale == common::RefCanonicalName("AVS"))) {
+      # concentration is meaningless for AVS (no electrolyte) so for those rows, we'll reset it
+      dfargs$concentration[which(dfargs$scale == common::RefCanonicalName("AVS"))] <- ""
+      dfargs$electrolyte[which(dfargs$scale == common::RefCanonicalName("AVS"))] <- ""
+   }
+
+   # now just work our way through dfargs, line-by-line to determine potential as SHE
+   # all necessary conditions should be recorded right here in dfargs
+   for (p in 1:dim(dfargs)[1]) {
+      ## WE ARE NOW WORKING ROW-BY-ROW THROUGH THE SUPPLIED ARGUMENTS IN dfargs
+      # Step-wise matching:
+      # + first, we subset against electrode scale. If dataset only has one row, done. Else,
+      # + we subset against either conc.string or conc.num. Stop if zero rows in dataset (error), otherwise proceed.
+      # Our "dataset" is the literature data supplied via the argument as.SHE.data
+      this.data.scale <- subset(as.SHE.data, electrode == dfargs$scale[p])
+      # subset.scale <- subset(as.SHE.data, electrode == dfargs$scale[p])
+      if (dim(this.data.scale)[1] > 1) {
          # continue matching, now against conc.string or conc.num
-         if (is.character(df$concentration[p])) {
-            subset.concentration <-
-               subset(subset.scale, conc.string == df$concentration[p])
+         if (is.character(dfargs$concentration[p])) {
+            this.data.concentration <-
+               subset(this.data.scale, conc.string == dfargs$concentration[p])
          } else {
-            subset.concentration <-
-               subset(subset.scale, conc.num == df$concentration[p])
+            this.data.concentration <-
+               subset(this.data.scale, conc.num == dfargs$concentration[p])
          }
          # stop if the resulting dataframe after matching contains no rows
-         if (dim(subset.concentration)[1] == 0) {
-            stop("Sorry, it seems we failed to find any matching entries in potentials.as.SHE().")
+         if (dim(this.data.concentration)[1] == 0) {
+            stop(paste0("Failed to find any matching entries in dataset for ",
+                        paste(dfargs[p, ], collapse = " ", sep = "")))
          }
-         # Note: it's ok at this point if the resulting df contains more than one row as
+         # Note: it's ok at this point if the resulting dataset contains more than one row as
          #       more matching will be done below
          # If we haven't had reason to stop(), we should be good
          # just housekeeping: rename the variable so we don't have to edit code below
-         subset.SHE.data <- subset.concentration
+         this.SHE.data <- this.data.concentration
       } else {
          # just housekeeping again
-         subset.SHE.data <- subset.scale
+         this.SHE.data <- this.data.scale
       }
 
-      # use KCl(aq) as default to avoid aborting
-      # (good assumption at this point, as we always have KCl for the cases
-      #  where an electrode system has more than one electrolyte)
-      default.electrolyte <- "KCl(aq)"
-      # If this subset contains more than one unique electrolyte (e.g., NaCl and KCl)
-      # the user MUST have made a choice (in the "electrolyte" argument) that results
-      # in a single electrolyte remaining, or else we will warn and abort
-      if (length(unique(subset.SHE.data$electrolyte)) > 1) {
-         # data (in subset.SHE.data) contains more than one electrolyte
-         # if user did not change electrolyte arg value, use default and issue warning
-         if (identical(electrolyte, formals(as.SHE)$electrolyte)) {
-            warning(paste0("You did not specify an electrolyte, but more than one ",
-                           "is available for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
-                           "We'll use the default electrolyte: ", default.electrolyte))
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == default.electrolyte)
+
+      ## Electrolyte
+      # == We would like to transparently handle the following scenario:
+      # || if the user did not specify electrolyte solution (which we can check by using formals())
+      # || but the dataset (after subsetting against scale and concentration above) still contains
+      # || more than one electrolyte
+      # >> Approach: we'll specify a "fallback" electrolyte, KCl (usually that's what the user wants)
+      # >> and inform/warn about it
+
+      # KCl is a good assumption, as we always have KCl for the cases where
+      # an electrode system has more than one electrolyte
+      fallback.electrolyte <- "KCl(aq)"
+      if (length(unique(this.SHE.data$electrolyte)) > 1) {
+         if (formals(as.SHE)$electrolyte == "") {
+            warning(paste0("More than one electrolyte ",
+                           "available for E(", dfargs$scale[p], ") in dataset. ",
+                           "I'll assume you want ", fallback.electrolyte, "."))
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == fallback.electrolyte)
          } else {
             # else the user did change the electrolyte arg, use the user's value
-            subset.SHE.data <-
-               subset.SHE.data[which(subset.SHE.data$electrolyte == electrolyte), ]
-            # print only for debugging - disable before production!
-            print(subset.SHE.data)
-            # stop if the resulting dataframe contains no rows
-            if (dim(subset.SHE.data)[1] == 0) {
-               stop("Your choice of electrolyte does not match any data!")
-            }
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == dfargs$electrolyte[p])
+            # but stop if the resulting dataframe contains no rows
+            if (dim(this.SHE.data)[1] == 0) stop("Your choice of electrolyte does not match any data!")
          }
       } else {
-         # data only contains one electrolyte
-         # just check that it matches whatever the user supplied, if not,
-         # issue a warning (but don't abort, typically the user did not set it
-         # because they don't care and want whatever is in the data)
-         if (any(subset.SHE.data$electrolyte != electrolyte)) {
-            warning(paste0("The requested electrolyte: ",
-                           ifelse(any(electrolyte == ""),
-                                  "<none specified>",
-                                  electrolyte),
-                           " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
-                           "My data only lists one electrolyte for that scale - return value calculated on that basis."))
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == unique(subset.SHE.data$electrolyte))
+         # dataset contains only one unique electrolyte
+         # again, check if electrolyte in arg matches the one in dataset
+         # if it does, great, if it does not, print a message and use it anyway
+         if (unique(this.SHE.data$electrolyte) == dfargs$electrolyte[p]) {
+            this.SHE.data <-
+               subset(this.SHE.data, electrolyte == dfargs$electrolyte[p])
          } else {
-            subset.SHE.data <-
-               subset(subset.SHE.data, electrolyte == electrolyte)
+            # whatever electrolyte the user supplied does not match what's left in the datasubset
+            # but at this point the user is probably better served by returning the electrolyte we have
+            # along with an informative message (that's the only reason for the if-else below)
+            electrolytes.in.subset <-
+               unique(subset(as.SHE.data, electrode == dfargs$scale[p])$electrolyte)
+            if (dfargs$electrolyte[p] == "") {
+               message(
+                  paste0('Electrolyte "" (empty string) not in dataset for E(',
+                         dfargs$scale[p], '). ',
+                         'These electrolytes are: ',
+                         paste(electrolytes.in.subset, collapse = ', or '), '.',
+                         "I'll assume you want ", fallback.electrolyte, ".")
+               )
+            } else {
+               message(paste0("Electrolyte ", dfargs$electrolyte[p], " not in dataset for E(",
+                              dfargs$scale[p], "). ",
+                              "These electrolytes are: ",
+                              paste(electrolytes.in.subset, collapse = ", or "), ".",
+                              "I'll assume you want ", fallback.electrolyte, ".")
+               )
+            }
          }
       }
 
       # temperature
       # either happens to match a temperature in the dataset, or we interpolate
       # (under the assumption that potential varies linearly with temperature)
-      if (!any(subset.SHE.data$temp == df$temperature[p])) {
+      if (!any(this.SHE.data$temp == dfargs$temperature[p])) {
          # sought temperature was not available in dataset, check that it falls inside
          # note: important to use less/more-than-or-equal in case data only contains one value
-         if ((df$temperature[p] <= max(subset.SHE.data$temp)) &&
-             (df$temperature[p] >= min(subset.SHE.data$temp))) {
+         if ((dfargs$temperature[p] <= max(this.SHE.data$temp)) && (dfargs$temperature[p] >= min(this.SHE.data$temp))) {
             # within dataset range, do linear interpolation
-            lm.subset <- stats::lm(SHE ~ temp, data = subset.SHE.data)
+            lm.subset <- stats::lm(SHE ~ temp, data = this.SHE.data)
             # interpolated temperature, calculated based on linear regression
             # (more accurate than simple linear interpolation with approx())
             pot.interp <-
-               lm.subset$coefficients[2] * df$temperature[p] + lm.subset$coefficients[1]
-            # message("Calc potential using interp temperature")
+               lm.subset$coefficients[2] * dfargs$temperature[p] + lm.subset$coefficients[1]
             ### CALC POTENTIAL vs requested scale
-            if (df$scale[p] == common::RefCanonicalName("AVS")) {
-               # message("Target scale is AVS")
-               df$potentialvsscale[p] <-
-                  pot.interp - df$potential[p]
-            } else {
-               # message("Target scale is not AVS")
-               df$potentialvsscale[p] <-
-                  df$potential[p] - pot.interp
-            }
+            dfargs$potentialvsscale[p] <-
+               ifelse(dfargs$scale[p] == "AVS",
+                      pot.interp - dfargs$potential[p],
+                      dfargs$potential[p] - pot.interp)
          }
       } else {
          # requested temperature does exist in dataset
          ### CALC POTENTIAL vs requested scale
-         # message("Calc potential using exact temperature match")
-         if (df$scale[p] == common::RefCanonicalName("AVS")) {
-            # message("Target scale is AVS")
-            df$potentialvsscale[p] <-
-               subset(subset.SHE.data, temp == df$temperature[p])$SHE - df$potential[p]
-         } else {
-            # message("Target scale is not AVS")
-            df$potentialvsscale[p] <-
-               df$potential[p] - subset(subset.SHE.data, temp == df$temperature[p])$SHE
-         }
+         dfargs$potentialvsscale[p] <-
+            ifelse(dfargs$scale[p] == "AVS",
+                   subset(this.SHE.data, temp == dfargs$temperature[p])$SHE - dfargs$potential[p],
+                   dfargs$potential[p] - subset(this.SHE.data, temp == dfargs$temperature[p])$SHE)
       }
    }
 
-   return(df$potentialvsscale)
+   return(dfargs$potentialvsscale)
 }
 
 
