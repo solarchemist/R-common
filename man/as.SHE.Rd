@@ -2,7 +2,7 @@
 % Please edit documentation in R/unit-converters-electrochemical.R
 \name{as.SHE}
 \alias{as.SHE}
-\title{Convert from electrochemical or electronic scale to SHE}
+\title{Convert from electrochemical or physical scale to SHE}
 \usage{
 as.SHE(potential, scale, electrolyte = "", concentration = "saturated",
   temperature = 25, as.SHE.data = potentials.as.SHE())

@@ -64,6 +64,7 @@ RefCanonicalName <- function(refname) {
         "Hg2Cl2",
         "Calomel-Mercury",
         "Mercury-Calomel",
+        "Calomel",
         "SCE")
    electrode.system[["AVS"]] <-
       c("AVS",
@@ -87,6 +88,39 @@ RefCanonicalName <- function(refname) {
         "Mg2+/Mg",
         "Mg/Mg2+",
         "Magnesium")
+
+   # if no argument or empty string supplied as arg, return the the entire list as df
+   # to give the user a nice overview of all available options
+   if (missing(refname) || refname == "") {
+      max.row.length <- 0
+      for (i in 1:length(electrode.system)) {
+         # find the longest row and save its length
+         this.row.length <- length(electrode.system[[i]])
+         if (this.row.length > max.row.length) max.row.length <- this.row.length
+      }
+      # initialise an empty df with dimensions that fit electrode.system
+      overview.names <-
+         data.frame(
+            structure(dimnames =
+                         list(
+                            # rownames
+                            seq(1, length(electrode.system)),
+                            # colnames
+                            c("canonical", paste0("option", seq(1, max.row.length - 1)))),
+                      matrix("",
+                             nrow = length(electrode.system),
+                             ncol = max.row.length,
+                             byrow = TRUE)),
+            stringsAsFactors = FALSE)
+      # now populate the df
+      for (i in 1:length(electrode.system)) {
+         this.row.length <- length(electrode.system[[i]])
+         overview.names[i,1:this.row.length] <- electrode.system[[i]]
+      }
+      message(paste0("You did not specify any reference electrode name.\n",
+                     "Here are the options supported by this function (case-insensitive):"))
+      print(knitr::kable(overview.names))
+   }
 
    # defining refname in this manner makes sure to get all possible combinations
    # but there might be a number of duplicates, but those we can
@@ -239,7 +273,7 @@ potentials.as.SHE <- function() {
 
 
 
-#' Convert from electrochemical or electronic scale to SHE
+#' Convert from electrochemical or physical scale to SHE
 #'
 #' Convert an arbitrary number of potentials against any known electrochemical
 #' scale (or the electronic vacuum scale) to potential vs SHE.
@@ -301,7 +335,7 @@ as.SHE <- function(potential,
    # this way, we can correlate columns to each other by row
    df <-
       data.frame(potential = potential,
-                 scale = RefCanonicalName(scale),
+                 scale = common::RefCanonicalName(scale),
                  electrolyte = electrolyte,
                  concentration = concentration,
                  temperature = temperature,
@@ -313,20 +347,20 @@ as.SHE <- function(potential,
 
    # SHE scale special considerations
    # 1. concentration is constant
-   if (any(df$scale == RefCanonicalName("SHE"))) {
-      df$concentration[which(df$scale == RefCanonicalName("SHE"))] <- ""
-      df$electrolyte[which(df$scale == RefCanonicalName("SHE"))] <- ""
+   if (any(df$scale == common::RefCanonicalName("SHE"))) {
+      df$concentration[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
+      df$electrolyte[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
    }
 
    # AVS scale special considerations
    # 1. concentration is meaningless
    # 2. direction is opposite of electrochemical scales, requiring change of sign
-   if (any(df$scale == RefCanonicalName("AVS"))) {
+   if (any(df$scale == common::RefCanonicalName("AVS"))) {
       # concentration is meaningless for AVS (no electrolyte)
       # so for those rows, we'll reset it
-      df$concentration[which(df$scale == RefCanonicalName("AVS"))] <- ""
-      df$electrolyte[which(df$scale == RefCanonicalName("AVS"))] <- ""
-      df$vacuum[which(df$scale == RefCanonicalName("AVS"))] <- TRUE
+      df$concentration[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
+      df$electrolyte[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
+      df$vacuum[which(df$scale == common::RefCanonicalName("AVS"))] <- TRUE
    }
 
    # now just work our way through df, line-by-line to determine potential as SHE
@@ -438,6 +472,208 @@ as.SHE <- function(potential,
    }
 
    return(df$SHE)
+}
+
+
+
+
+
+#' Convert from SHE scale to another electrochemical or physical scale
+#'
+#' Convert an arbitrary number of potentials vs SHE to another electrochemical
+#' scale (or the vacuum scale).
+#' The available target scales are those listed by \code{\link{potentials.as.SHE}}.
+#'
+#' @param potential potential in volt
+#' @param scale name of the target scale
+#' @param electrolyte optional, specify electrolyte solution, e.g., "KCl(aq)". Must match one of the values in \code{\link{potentials.as.SHE}$electrolyte}
+#' @param concentration of electrolyte in mol/L, or as the string "saturated"
+#' @param temperature of system in degrees Celsius
+#' @param as.SHE.data by default this parameter reads the full dataset \code{\link{potentials.as.SHE}}
+#'
+#' @return potential in the specified target scale
+#' @export
+from.SHE <- function(potential,
+                     scale,
+                     electrolyte = "",
+                     concentration = "saturated",
+                     temperature = 25,
+                     as.SHE.data = potentials.as.SHE()) {
+
+   # make this work for arbitrary-length vectors of potential and scale
+   # make sure potential and scale args have the same length
+   if (length(potential) == 0 | length(scale) == 0) {
+      stop("Arguments potential or scale cannot be empty!")
+   } else if (length(potential) != length(scale)) {
+      stop("Arguments potential and scale must have the same number of elements")
+   }
+
+   arglength <- length(potential)
+   # make the args concentration, temperature and electrolyte this same length,
+   # unless the user supplied them (only necessary for > 1)
+   if (arglength > 1) {
+      # handle two cases:
+      # 1. user did not touch concentration, temperature and electrolyte args.
+      #    Assume they forgot and reset their length and print a message
+      # 2. user did change concentration or temperature or electrolyte, but still failed to
+      #    ensure length equal to arglength. In this case, abort.
+      # note: we can get the default value set in the function call using formals()
+      if (identical(concentration, formals(from.SHE)$concentration) &
+          identical(temperature, formals(from.SHE)$temperature) &
+          identical(electrolyte, formals(from.SHE)$electrolyte)) {
+         # case 1
+         message(paste0("Default concentration (", formals(from.SHE)$concentration, "), temperature (", formals(from.SHE)$temperature, "C) used for all supplied potential and scale values."))
+         concentration <- rep(concentration, arglength)
+         temperature <- rep(temperature, arglength)
+         electrolyte <- rep(electrolyte, arglength)
+      } else {
+         # case 2
+         stop("Concentration, temperature and electrolyte arguments must have the same number of elements as potential and scale!")
+      }
+   }
+
+   ## we can now safely assume that length(<args>) == arglength
+   # place args into a single dataframe
+   # this way, we can correlate columns to each other by row
+   df <-
+      data.frame(potential = potential, # vs SHE
+                 scale = common::RefCanonicalName(scale), # target scale
+                 electrolyte = electrolyte,
+                 concentration = concentration,
+                 temperature = temperature,
+                 stringsAsFactors = FALSE)
+   # # add column to keep track of vacuum scale
+   # df$vacuum <- as.logical(FALSE)
+   # # add column to hold calc potential vs target scale
+   # df$targetscale <-  as.numeric(NA)
+
+   ## Special considerations
+   # SHE scale independent of concentration, per definition
+   if (any(df$scale == common::RefCanonicalName("SHE"))) {
+      df$concentration[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
+      df$electrolyte[which(df$scale == common::RefCanonicalName("SHE"))] <- ""
+   }
+   # AVS scale: concentration is meaningless (no electrolyte)
+   if (any(df$scale == common::RefCanonicalName("AVS"))) {
+      df$concentration[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
+      df$electrolyte[which(df$scale == common::RefCanonicalName("AVS"))] <- ""
+   }
+
+   for (p in 1:dim(df)[1]) {
+      # First, subset against electrode scale. If as.SHE.data only contains one row
+      # for this electrode scale we are DONE. If not, proceed to subset against concentration
+      subset.scale <- subset(as.SHE.data, electrode == df$scale[p])
+      if (dim(subset.scale)[1] > 1) {
+         # continue matching, now against conc.string or conc.num
+         if (is.character(df$concentration[p])) {
+            subset.concentration <-
+               subset(subset.scale, conc.string == df$concentration[p])
+         } else {
+            subset.concentration <-
+               subset(subset.scale, conc.num == df$concentration[p])
+         }
+         # stop if the resulting dataframe after matching contains no rows
+         if (dim(subset.concentration)[1] == 0) {
+            stop("Sorry, it seems we failed to find any matching entries in potentials.as.SHE().")
+         }
+         # Note: it's ok at this point if the resulting df contains more than one row as
+         #       more matching will be done below
+         # If we haven't had reason to stop(), we should be good
+         # just housekeeping: rename the variable so we don't have to edit code below
+         subset.SHE.data <- subset.concentration
+      } else {
+         # just housekeeping again
+         subset.SHE.data <- subset.scale
+      }
+
+      # use KCl(aq) as default to avoid aborting
+      # (good assumption at this point, as we always have KCl for the cases
+      #  where an electrode system has more than one electrolyte)
+      default.electrolyte <- "KCl(aq)"
+      # If this subset contains more than one unique electrolyte (e.g., NaCl and KCl)
+      # the user MUST have made a choice (in the "electrolyte" argument) that results
+      # in a single electrolyte remaining, or else we will warn and abort
+      if (length(unique(subset.SHE.data$electrolyte)) > 1) {
+         # data (in subset.SHE.data) contains more than one electrolyte
+         # if user did not change electrolyte arg value, use default and issue warning
+         if (identical(electrolyte, formals(as.SHE)$electrolyte)) {
+            warning(paste0("You did not specify an electrolyte, but more than one ",
+                           "is available for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
+                           "We'll use the default electrolyte: ", default.electrolyte))
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == default.electrolyte)
+         } else {
+            # else the user did change the electrolyte arg, use the user's value
+            subset.SHE.data <-
+               subset.SHE.data[which(subset.SHE.data$electrolyte == electrolyte), ]
+            # print only for debugging - disable before production!
+            print(subset.SHE.data)
+            # stop if the resulting dataframe contains no rows
+            if (dim(subset.SHE.data)[1] == 0) {
+               stop("Your choice of electrolyte does not match any data!")
+            }
+         }
+      } else {
+         # data only contains one electrolyte
+         # just check that it matches whatever the user supplied, if not,
+         # issue a warning (but don't abort, typically the user did not set it
+         # because they don't care and want whatever is in the data)
+         if (unique(subset.SHE.data$electrolyte) != electrolyte) {
+            warning(paste0("The requested electrolyte: ",
+                           ifelse(electrolyte == "", "<none specified>", electrolyte),
+                           " was not found for E = ", df$potential[p], " V vs ", df$scale[p], ".\n",
+                           "My data only lists one electrolyte for that scale - return value calculated on that basis."))
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == unique(subset.SHE.data$electrolyte))
+         } else {
+            subset.SHE.data <-
+               subset(subset.SHE.data, electrolyte == electrolyte)
+         }
+      }
+
+      # temperature
+      # either happens to match a temperature in the dataset, or we interpolate
+      # (under the assumption that potential varies linearly with temperature)
+      if (!any(subset.SHE.data$temp == df$temperature[p])) {
+         # sought temperature was not available in dataset, check that it falls inside
+         # note: important to use less/more-than-or-equal in case data only contains one value
+         if ((df$temperature[p] <= max(subset.SHE.data$temp)) &&
+             (df$temperature[p] >= min(subset.SHE.data$temp))) {
+            # within dataset range, do linear interpolation
+            lm.subset <- stats::lm(SHE ~ temp, data = subset.SHE.data)
+            # interpolated temperature, calculated based on linear regression
+            # (more accurate than simple linear interpolation with approx())
+            pot.interp <-
+               lm.subset$coefficients[2] * df$temperature[p] + lm.subset$coefficients[1]
+            message("Calc potential using interp temperature")
+            ### CALC POTENTIAL vs requested scale
+            if (df$scale[p] == common::RefCanonicalName("AVS")) {
+               # message("Target scale is AVS")
+               df$potentialvsscale[p] <-
+                  pot.interp - df$potential[p]
+            } else {
+               # message("Target scale is not AVS")
+               df$potentialvsscale[p] <-
+                  df$potential[p] - pot.interp
+            }
+         }
+      } else {
+         # requested temperature does exist in dataset
+         ### CALC POTENTIAL vs requested scale
+         message("Calc potential using exact temperature match")
+         if (df$scale[p] == common::RefCanonicalName("AVS")) {
+            # message("Target scale is AVS")
+            df$potentialvsscale[p] <-
+               subset(subset.SHE.data, temp == df$temperature[p])$SHE - df$potential[p]
+         } else {
+            # message("Target scale is not AVS")
+            df$potentialvsscale[p] <-
+               df$potential[p] - subset(subset.SHE.data, temp == df$temperature[p])$SHE
+         }
+      }
+   }
+
+   return(df$potentialvsscale)
 }
 
 
