@@ -4,9 +4,15 @@
 \alias{GenericXtableSetAttributes}
 \title{Set the attributes for a generic xtable object}
 \usage{
-GenericXtableSetAttributes(xtobject, nxtnames = NULL, nxtdigits = NULL,
-  nxtdisplay = NULL, nxtalign = NULL, caption.text = "nxtcaption",
-  caption.label = "tab:nxtlabel")
+GenericXtableSetAttributes(
+  xtobject,
+  nxtnames = NULL,
+  nxtdigits = NULL,
+  nxtdisplay = NULL,
+  nxtalign = NULL,
+  caption.text = "nxtcaption",
+  caption.label = "tab:nxtlabel"
+)
 }
 \arguments{
 \item{xtobject}{the xtable (table)}

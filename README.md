@@ -2,9 +2,11 @@
 
 Includes common numerical functions and some LaTeX-specific functions.
 
-Note that the package is named `common`, despite the repository having a different name.
+Note that the package is named `common`, despite the repository being name `R-common`.
+Sorry about that (this was one of the very first packages I created, and I haven't 
+gotten around to fixing the naming mismatch yet).
 
-[This repository is mirrored on my Gitea](https://git.chepec.se/taha/common).
+[This repository is mirrored on my Gitea](https://git.solarchemist.se/taha/common).
 
 
 

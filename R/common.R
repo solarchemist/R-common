@@ -101,7 +101,7 @@ numbers2words <- function(x, billion = c("US", "UK"), and = if (billion == "US")
    opts <- options(scipen = 100)
    on.exit(options(opts))
    ones <- c("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
-   teens <- c("ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", " seventeen", "eighteen", "nineteen")
+   teens <- c("ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen")
    names(ones) <- names(teens) <- 0:9
    tens <- c("twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
    names(tens) <- 2:9
@@ -110,6 +110,64 @@ numbers2words <- function(x, billion = c("US", "UK"), and = if (billion == "US")
    } else {
       c("thousand,", "million,", "thousand million,", "billion,")
    }
+   x <- round(x)
+   if (length(x) > 1) sapply(x, helper) else helper(x)
+}
+
+
+#' numbers2swedish
+#'
+#' Converts a number into its corresponding words in Swedish
+#' This is my own adaptation of numbers2words()
+#' I think an even neater solution would be to have an argument
+#' numbers2words(lang = "swe"), but that would require more coding
+#' THIS FUNCTION NEEDS WORK
+#' Cannot return proper grammar: "en miljon" and "ett tusen", or
+#' "en miljon" and "två miljoner", and so on.
+#'
+#' @param x         number
+#'
+#' @return string
+#' @export
+numbers2swedish <- function(x) {
+   and <- ""
+   trim <- function(text) {
+      gsub("(^\ *)|((\ *|-|,\ noll|-noll)$)", "", text)
+   }
+   makeNumber <- function(x) as.numeric(paste(x, collapse = ""))
+   makeDigits <- function(x) strsplit(as.character(x), "")[[1]]
+   helper <- function(x) {
+      negative <- x < 0
+      x <- abs(x)
+      digits <- makeDigits(x)
+      nDigits <- length(digits)
+      result <- if (nDigits == 1) as.vector(ones[digits])
+      else if (nDigits == 2)
+         if (x <= 19) as.vector(teens[digits[2]])
+      else trim(paste(tens[digits[1]], "-", ones[digits[2]], sep=""))
+      else if (nDigits == 3) {
+         tail <- makeNumber(digits[2:3])
+         if (tail == 0) paste(ones[digits[1]], "hundra")
+         else trim(paste(ones[digits[1]], trim(paste("hundra", and)),
+                         helper(tail)))
+      } else {
+         nSuffix <- ((nDigits + 2) %/% 3) - 1
+         if (nSuffix > length(suffixes) || nDigits > 15)
+            stop(paste(x, "is too large!"))
+         pick <- 1:(nDigits - 3 * nSuffix)
+         trim(paste(helper(makeNumber(digits[pick])), suffixes[nSuffix], helper(makeNumber(digits[-pick]))))
+      }
+      if (negative) paste("minus", result) else result
+   }
+   opts <- options(scipen = 100)
+   on.exit(options(opts))
+   ones <- c("noll", "ett", "tv\U00E5", "tre", "fyra", "fem", "sex", "sju", "\U00E5tta", "nio")
+   teens <- c("tio", "elva", "tolv", "tretton", "fjorton", "femton", "sexton", "sjutton", "arton", "nitton")
+   names(ones) <- names(teens) <- 0:9
+   tens <- c("tjugo", "trettio", "fyrtio", "femtio", "sextio", "sjuttio", "\U00E5ttio", "nittio")
+   names(tens) <- 2:9
+   # https://sv.wikipedia.org/wiki/Namn_p%C3%A5_stora_tal
+   suffixes <- c("tusen,", "miljoner,", "miljarder,", "biljoner,")
    x <- round(x)
    if (length(x) > 1) sapply(x, helper) else helper(x)
 }

@@ -4,8 +4,14 @@
 \alias{SubfigureGenerator}
 \title{Generate LaTeX subfigure code}
 \usage{
-SubfigureGenerator(images, subcaptions, mainlabel = "fig:mainfig",
-  perpage = 6, ncol = 2, landscape = FALSE)
+SubfigureGenerator(
+  images,
+  subcaptions,
+  mainlabel = "fig:mainfig",
+  perpage = 6,
+  ncol = 2,
+  landscape = FALSE
+)
 }
 \arguments{
 \item{images}{vector with full paths to images (png-files or other LaTeX-compatible format)

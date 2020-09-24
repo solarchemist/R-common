@@ -4,8 +4,11 @@
 \alias{numbers2words}
 \title{numbers2words}
 \usage{
-numbers2words(x, billion = c("US", "UK"), and = if (billion == "US") ""
-  else "and")
+numbers2words(
+  x,
+  billion = c("US", "UK"),
+  and = if (billion == "US") "" else "and"
+)
 }
 \arguments{
 \item{x}{number}
