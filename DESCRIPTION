@@ -1,8 +1,8 @@
 Package: common
 Type: Package
-Title: chepec common
-Version: 0.0.1.9001
-Description: Commonly used functions and scripts.
+Title: solarchemist's collection of common R functions
+Version: 0.0.2
+Description: solarchemist's collection of commonly-used R functions and scripts.
 Authors@R: person("Taha", "Ahmed", email = "taha@chepec.se", role = c("aut", "cre"))
 License: GPL-3
 Encoding: UTF-8

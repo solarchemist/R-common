@@ -20,12 +20,24 @@ simpleCap <- function(x) {
 #' Works well when the R-data file contains only ONE variable.
 #' Not tested for when the R-data file contains more than one variable.
 #'
-#' @param FullPathToRData path to rda file
+#' @param path local path to rda file (default)
+#' @param url  remote URL to rda file (note: requires explicitly specifying argument)
 #'
-#' @return an R object, you will probable want to assign it to a variable
+#' @return an R object, you will probably want to assign it to a variable
 #' @export
-LoadRData2Variable <- function(FullPathToRData) {
-   return(eval(parse(text = load(FullPathToRData))))
+#' @examples
+#' \dontrun{
+#' abscoeff <- LoadRData2Variable("/path/file.rda")
+#' abscoeef <- LoadRData2Variable(url="http://public.solarchemist/data/file.rda")
+#' }
+LoadRData2Variable <- function(path, url = "") {
+	# BEWARE: this function does **not** check for all possible 
+	# variations in the two args. Someone should really improve on that.
+	if (url == "") {
+		return(eval(parse(text = load(path))))
+	} else {
+		return(eval(parse(text = load(url(url)))))
+	}
 }
 
 

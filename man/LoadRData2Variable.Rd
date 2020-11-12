@@ -4,16 +4,24 @@
 \alias{LoadRData2Variable}
 \title{LoadRData2Variable}
 \usage{
-LoadRData2Variable(FullPathToRData)
+LoadRData2Variable(path, url = "")
 }
 \arguments{
-\item{FullPathToRData}{path to rda file}
+\item{path}{local path to rda file (default)}
+
+\item{url}{remote URL to rda file (note: requires explicitly specifying argument)}
 }
 \value{
-an R object, you will probable want to assign it to a variable
+an R object, you will probably want to assign it to a variable
 }
 \description{
 This function loads R-data file into a variable instead of into the workspace.
 Works well when the R-data file contains only ONE variable.
 Not tested for when the R-data file contains more than one variable.
+}
+\examples{
+\dontrun{
+abscoeff <- LoadRData2Variable("/path/file.rda")
+abscoeef <- LoadRData2Variable(url="http://public.solarchemist/data/file.rda")
+}
 }
