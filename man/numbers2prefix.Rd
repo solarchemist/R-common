@@ -14,7 +14,8 @@ numbers2prefix(number, rounding = FALSE, digits = ifelse(rounding, NA, 6))
 \item{digits}{if rounding=FALSE, lets you specify significant figures (default 6), numeric}
 }
 \value{
-number with SI prefix (as character string)
+number followed by SI prefix (as character string,
+    separated by narrow no-break space)
 }
 \description{
 Using SI unit prefixes is a more compact way to write very large or very small

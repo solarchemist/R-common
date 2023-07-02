@@ -36,11 +36,11 @@ I suggest the following package rebuild procedure:
 + Run `devtools::check()`.
   Should complete with no warnings, errors or notes:
 ```
-── R CMD check results ─────────────────────────────────────── common 0.1.0 ────
+── R CMD check results ─────────────────────────────────────── common 0.1.1 ────
 Duration: 8.1s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 ```
-+ If necessary, run `devtools::document()` to update the documentation.
++ As necessary, run `devtools::document()` to update the documentation.
 
 Contributions are welcome, no matter whether code, bug reports or suggestions!

@@ -60,7 +60,8 @@ is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
 #' @param rounding rounds number to nearest integer (default FALSE), boolean
 #' @param digits   if rounding=FALSE, lets you specify significant figures (default 6), numeric
 #'
-#' @return number with SI prefix (as character string)
+#' @return number followed by SI prefix (as character string,
+#'     separated by narrow no-break space)
 #' @export
 numbers2prefix <- function(number, rounding = FALSE, digits = ifelse(rounding, NA, 6)) {
    # https://www.nist.gov/pml/owm/metric-si-prefixes
@@ -96,12 +97,12 @@ numbers2prefix <- function(number, rounding = FALSE, digits = ifelse(rounding, N
    ix <- findInterval(x = number, vec = lut$factor)
    if (ix > 0 && ix < length(lut$factor) && lut$factor[ix] != 1) {
       if (rounding == TRUE && !is.numeric(digits)) {
-         sistring <- paste(round(number / lut$factor[ix]), lut$symbol[ix])
+         sistring <- paste0(round(number / lut$factor[ix]), "\u202f", lut$symbol[ix])
       } else
          if (rounding == TRUE || is.numeric(digits)) {
-            sistring <- paste(signif(number / lut$factor[ix], digits), lut$symbol[ix])
+            sistring <- paste0(signif(number / lut$factor[ix], digits), "\u202f", lut$symbol[ix])
          } else {
-            sistring <- paste(number / lut$factor[ix], lut$symbol[ix])
+            sistring <- paste0(number / lut$factor[ix], "\u202f", lut$symbol[ix])
          }
    } else {
       sistring <- as.character(number)
