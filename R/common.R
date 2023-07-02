@@ -31,7 +31,7 @@ simpleCap <- function(x) {
 #' abscoeef <- LoadRData2Variable(url="http://public.solarchemist/data/file.rda")
 #' }
 LoadRData2Variable <- function(path, url = "") {
-	# BEWARE: this function does **not** check for all possible 
+	# BEWARE: this function does **not** check for all possible
 	# variations in the two args. Someone should really improve on that.
 	if (url == "") {
 		return(eval(parse(text = load(path))))

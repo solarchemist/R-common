@@ -1,33 +1,3 @@
-# nm2eV <- function(nm) {
-#    ## Depends on:
-#    ## chepec/chetex/common/R/sunlight/solarconstants.R
-#    # Converts wavelength in nm to energy in eV
-#    #
-#    sun.constants <- solar.constants()
-#
-#    eV <-
-#       sun.constants["h.eV", "value"] *
-#       1E9 * sun.constants["c", "value"] / nm
-#
-#    return(eV)
-# }
-
-
-# eV2nm <- function(eV) {
-#    ## Depends on:
-#    ## chepec/chetex/common/R/sunlight/solarconstants.R
-#    # Converts energy in eV to wavelength in nm
-#    #
-#    sun.constants <- solar.constants()
-#
-#    nm <-
-#       sun.constants["h.eV", "value"] *
-#       1E9 * sun.constants["c", "value"] / eV
-#
-#    return(nm)
-# }
-
-
 #' Convert wavelength to wavenumber
 #'
 #' Converts wavelength (nm) to wavenumber (cm-1)

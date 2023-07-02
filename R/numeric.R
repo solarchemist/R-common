@@ -42,3 +42,69 @@ roundup <- function(x, nearest=1000) {
 is.wholenumber <- function(x, tol = .Machine$double.eps^0.5) {
    abs(x - round(x)) < tol
 }
+
+
+#' Format numbers using SI unit prefixes
+#'
+#' Using SI unit prefixes is a more compact way to write very large or very small
+#' numbers which can sometimes be useful. This function takes a number (or a vector
+#' of numbers) and returns the equivalent value expressed using the nearest prefix.
+#' My thanks to https://stackoverflow.com/users/843265/tomelgin for posting the
+#' code that this function was based on (see first link below).
+#'
+#' @seealso https://stackoverflow.com/questions/11340444/convert-numbers-to-si-prefix
+#' @seealso https://stackoverflow.com/questions/28159936/format-numbers-with-million-m-and-billion-b-suffixes
+#' @seealso https://www.nist.gov/pml/owm/metric-si-prefixes
+#'
+#' @param number   number, numeric vector
+#' @param rounding rounds number to nearest integer (default FALSE), boolean
+#' @param digits   if rounding=FALSE, lets you specify significant figures (default 6), numeric
+#'
+#' @return number with SI prefix (as character string)
+#' @export
+numbers2prefix <- function(number, rounding = FALSE, digits = ifelse(rounding, NA, 6)) {
+   # https://www.nist.gov/pml/owm/metric-si-prefixes
+   # https://en.wikipedia.org/wiki/Unit_prefix
+   # https://blog.ansi.org/anab/new-prefixes-si-ronto-quecto-ronna-quetta
+   lut <- tibble::tribble(
+      ~factor, ~symbol,
+      1e-30,   "q",      # quecto
+      1e-27,   "r",      # ronto
+      1e-24,   "y",      # yocto
+      1e-21,   "z",      # zepto
+      1e-18,   "a",      # atto
+      1e-15,   "f",      # femto
+      1e-12,   "p",      # pico
+      1e-09,   "n",      # nano
+      1e-06,   "\u00B5", # micro
+      1e-03,   "m",      # milli
+      1e-02,   "c",      # centi
+      1e-01,   "d",      # deci
+      1,       "",
+      1e03,    "k",      # kilo
+      1e06,    "M",      # mega
+      1e09,    "G",      # giga
+      1e12,    "T",      # tera
+      1e15,    "P",      # peta
+      1e18,    "E",      # exa
+      1e21,    "Z",      # zetta
+      1e24,    "Y",      # yotta
+      1e27,    "R",      # ronna
+      1e30,    "Q")      # quetta
+
+   # note that findInterval() requires vec to be sorted non-decreasingly and not contain NAs
+   ix <- findInterval(x = number, vec = lut$factor)
+   if (ix > 0 && ix < length(lut$factor) && lut$factor[ix] != 1) {
+      if (rounding == TRUE && !is.numeric(digits)) {
+         sistring <- paste(round(number / lut$factor[ix]), lut$symbol[ix])
+      } else
+         if (rounding == TRUE || is.numeric(digits)) {
+            sistring <- paste(signif(number / lut$factor[ix], digits), lut$symbol[ix])
+         } else {
+            sistring <- paste(number / lut$factor[ix], lut$symbol[ix])
+         }
+   } else {
+      sistring <- as.character(number)
+   }
+   return(sistring)
+}
