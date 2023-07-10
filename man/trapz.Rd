@@ -15,6 +15,6 @@ trapz(x, y)
 vector (of length n - 1)
 }
 \description{
-Numerically  calculate area under an arbitrary curve (defined by x, y coord pairs)
+Numerically calculate area under an arbitrary curve (defined by x, y coord pairs)
 using trapezodial integration. See Wikipedia for more info on trapz integration.
 }

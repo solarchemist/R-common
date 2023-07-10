@@ -1,6 +1,62 @@
+#' Convert arcminutes to degrees
+#'
+#' Convert arcminutes to degrees
+#'
+#' @param x arcminutes, numeric
+#'
+#' @seealso https://en.wikipedia.org/w/index.php?title=Minute_and_second_of_arc&oldid=1159601591
+#'
+#' @return degrees, numeric
+#' @export
+amin2degrees <- function(x) {
+   return (x / 60)
+}
+
+
+#' Convert arcseconds to degrees
+#'
+#' Convert arcseconds to degrees
+#'
+#' @param x arcseconds, numeric
+#'
+#' @seealso https://en.wikipedia.org/w/index.php?title=Minute_and_second_of_arc&oldid=1159601591
+#'
+#' @return degrees, numeric
+#' @export
+asec2degrees <- function(x) {
+   return (common::amin2degrees(x / 60))
+}
+
+
+#' Convert degrees to arcminutes
+#'
+#' Convert degrees to arcminutes
+#'
+#' @param x degrees, numeric
+#'
+#' @return arcminutes, numeric
+#' @export
+degrees2amin <- function(x) {
+   return (60 * x)
+}
+
+
+#' Convert degrees to arcseconds
+#'
+#' Convert degrees to arcseconds
+#'
+#' @param x degrees, numeric
+#'
+#' @return arcseconds, numeric
+#' @export
+degrees2asec <- function(x) {
+   return (60 * common::degrees2amin(x))
+}
+
+
 #' Calculate area under a curve
 #'
-#' Numerically  calculate area under an arbitrary curve (defined by x, y coord pairs)
+#' Numerically calculate area under an arbitrary curve (defined by x, y coord pairs)
 #' using trapezodial integration. See Wikipedia for more info on trapz integration.
 #'
 #' @param x  vector (of length n)

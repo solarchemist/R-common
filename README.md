@@ -36,7 +36,7 @@ I suggest the following package rebuild procedure:
 + Run `devtools::check()`.
   Should complete with no warnings, errors or notes:
 ```
-── R CMD check results ─────────────────────────────────────── common 0.1.1 ────
+── R CMD check results ─────────────────────────────────────── common 0.1.2 ────
 Duration: 8.1s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
